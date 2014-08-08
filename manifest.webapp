@@ -1,0 +1,21 @@
+{
+  "name": "SignIn",
+  "description": "Designed to allow quick and easy sign in to Google spreadsheet based QR codes.",
+  "launch_path": "/index.html",
+  "icons": {
+    "60": "/res/firefox/icons/icon-60.png",
+    "128": "/res/firefox/icons/icon-128.png"
+  },
+  "developer": {
+    "name": "Samer Albahra",
+    "url": "http://albahra.com/"
+  },
+  "permissions": {
+    "systemXHR": {
+      "description": "Required to access Google spreadsheets."
+    }
+  },
+  "default_locale": "en",
+  "type": "privileged",
+  "version": "1.0.0"
+}

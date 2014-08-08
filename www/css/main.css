@@ -1,0 +1,50 @@
+body {
+    margin:0
+}
+a {
+    text-decoration:none
+}
+:not(input) {
+    -webkit-touch-callout:none;
+    -webkit-user-select:none;
+    -moz-user-select:none;
+    -ms-user-select:none;
+    -ms-touch-select:none;
+    -ms-content-zooming:none;
+    -o-user-select:none;
+    user-select:none
+}
+.tight {
+    margin:0
+}
+.smaller {
+    margin:0;
+    font-size:smaller
+}
+.nobr {
+    white-space:nowrap
+}
+.wrap {
+    white-space:inherit!important
+}
+.mini-load {
+    zoom:.5;
+    height:2.875em;
+    width:2.875em;
+    margin:0 auto!important;
+    opacity:.18
+}
+
+.center {
+    text-align:center!important
+}
+
+#sure {
+    padding:0.5em;
+    width:300px
+}
+@media (max-width:480px) {
+    #sure {
+        width:250px
+    }
+}

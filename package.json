@@ -1,0 +1,31 @@
+{
+  "name": "SignIn",
+  "version": "1.0.0",
+  "description": "Designed to allow quick and easy sign in to Google spreadsheet based QR codes.",
+  "main": "www/js/main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/salbahra/SignIn.git"
+  },
+  "keywords": [
+    "signin",
+    "scan",
+    "spreadsheet",
+    "google"
+  ],
+  "author": "Samer Albahra",
+  "bugs": {
+    "url": "https://github.com/salbahra/SignIn/issues"
+  },
+  "homepage": "https://github.com/salbahra/SignIn",
+  "devDependencies": {
+    "grunt": "^0.4.5",
+    "grunt-contrib-compress": "^0.10.0",
+    "grunt-contrib-jshint": "^0.10.0",
+    "grunt-shell": "^0.7.0",
+    "grunt-text-replace": "^0.3.12"
+  }
+}
