@@ -101,14 +101,23 @@ $(document)
         } catch(err) {}
     },500);
 
-    // Check if device is on a local network
-    checkAutoScan();
-
     // For Android, Blackberry and Windows Phone devices catch the back button and redirect it
     $.mobile.document.on("backbutton",function(){
         goBack();
         return false;
     });
+
+    cordova.plugins.barcodeScanner.scan(
+      function (result) {
+          alert("We got a barcode\n" +
+                "Result: " + result.text + "\n" +
+                "Format: " + result.format + "\n" +
+                "Cancelled: " + result.cancelled);
+      },
+      function (error) {
+          alert("Scanning failed: " + error);
+      }
+    );
 })
 .one("mobileinit", function(){
     //After jQuery mobile is loaded set intial configuration
@@ -119,6 +128,9 @@ $(document)
 .one("pagebeforechange", function(event) {
     // Let the framework know we're going to handle the first load
     event.preventDefault();
+
+    // Hide loader icon
+    $.mobile.loading("hide");
 
     // Bind the event handler for subsequent pagebeforechange requests
     $.mobile.document.on("pagebeforechange",function(e,data){
@@ -156,8 +168,6 @@ $(document)
             $.mobile.silentScroll(0);
         }
     });
-    //On initial load check if a valid configuration is present
-    check_configured(true);
 })
 .on("resume",function(){
 // Handle OS resume event triggered by PhoneGap
@@ -188,24 +198,6 @@ $(document)
 $.ajaxSetup({
     timeout: 6000
 });
-
-// Check configuration
-function check_configured(firstLoad) {
-    if (firstLoad) {
-        $.mobile.loading("hide");
-        cordova.plugins.barcodeScanner.scan(
-          function (result) {
-              alert("We got a barcode\n" +
-                    "Result: " + result.text + "\n" +
-                    "Format: " + result.format + "\n" +
-                    "Cancelled: " + result.cancelled);
-          },
-          function (error) {
-              alert("Scanning failed: " + error);
-          }
-       );
-    }
-}
 
 // Accessory functions for jQuery Mobile
 function areYouSure(text1, text2, callback) {
