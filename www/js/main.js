@@ -1,17 +1,10 @@
-/*global $, Windows, MSApp, navigator, chrome, FastClick, StatusBar, escape */
+/*global $, Windows, MSApp, navigator, FastClick, StatusBar */
 var isIEMobile = /IEMobile/.test(navigator.userAgent),
     isAndroid = /Android|\bSilk\b/.test(navigator.userAgent),
     isiOS = /iP(ad|hone|od)/.test(navigator.userAgent),
-    isFireFoxOS = /^.*?\Mobile\b.*?\Firefox\b.*?$/m.test(navigator.userAgent),
     isWinApp = /MSAppHost/.test(navigator.userAgent),
-    isOSXApp = isOSXApp || false,
-    isChromeApp = typeof chrome === "object" && typeof chrome.storage === "object",
-    retryCount = 3;
-
-// Fix CSS for Chrome Web Store apps
-if (isChromeApp) {
-    insertStyle("html,body{overflow-y:scroll}");
-}
+    isReady = false,
+    profile, storage, language;
 
 // Prevent caching of AJAX requests on Android and Windows Phone devices
 if (isAndroid) {
@@ -23,13 +16,6 @@ if (isAndroid) {
 } else if (isIEMobile || isWinApp) {
     $.ajaxSetup({
         "cache": false
-    });
-} else if (isFireFoxOS) {
-    // Allow cross domain AJAX requests in FireFox OS
-    $.ajaxSetup({
-      xhrFields: {
-        mozSystem: true
-      }
     });
 }
 
@@ -57,21 +43,66 @@ if (isWinApp) {
     };
 }
 
+// Small wrapper to localStorage async method (for future expansion/change)
+storage = {
+    get: function(query,callback) {
+        callback = callback || function(){};
+
+        var data = {},
+            i;
+
+        if (typeof query === "object") {
+            for (i in query) {
+                if (query.hasOwnProperty(i)) {
+                    data[query[i]] = localStorage.getItem(query[i]);
+                }
+            }
+        } else if (typeof query === "string") {
+            data[query] = localStorage.getItem(query);
+        }
+
+        callback(data);
+    },
+    set: function(query,callback) {
+        callback = callback || function(){};
+
+        var i;
+        if (typeof query === "object") {
+            for (i in query) {
+                if (query.hasOwnProperty(i)) {
+                    localStorage.setItem(i,query[i]);
+                }
+            }
+        }
+
+        callback(true);
+    },
+    remove: function(query,callback) {
+        callback = callback || function(){};
+
+        var i;
+
+        if (typeof query === "object") {
+            for (i in query) {
+                if (query.hasOwnProperty(i)) {
+                    localStorage.removeItem(query[i]);
+                }
+            }
+        } else if (typeof query === "string") {
+            localStorage.removeItem(query);
+        }
+
+        callback(true);
+    }
+};
+
 $(document)
 .ready(function() {
     //Attach FastClick handler
     FastClick.attach(document.body);
 
     //Update the language on the page using the browser's locale
-    update_lang();
-
-    //Change history method for Chrome Packaged Apps
-    if (isChromeApp) {
-        $.mobile.document.on("click",".ui-toolbar-back-btn",function(){
-            goBack();
-            return false;
-        });
-    }
+    updateLang();
 
     //Use system browser for links on iOS and Windows Phone
     if (isiOS || isIEMobile) {
@@ -107,17 +138,7 @@ $(document)
         return false;
     });
 
-    cordova.plugins.barcodeScanner.scan(
-      function (result) {
-          alert("We got a barcode\n" +
-                "Result: " + result.text + "\n" +
-                "Format: " + result.format + "\n" +
-                "Cancelled: " + result.cancelled);
-      },
-      function (error) {
-          alert("Scanning failed: " + error);
-      }
-    );
+    isReady = true;
 })
 .one("mobileinit", function(){
     //After jQuery mobile is loaded set intial configuration
@@ -128,9 +149,6 @@ $(document)
 .one("pagebeforechange", function(event) {
     // Let the framework know we're going to handle the first load
     event.preventDefault();
-
-    // Hide loader icon
-    $.mobile.loading("hide");
 
     // Bind the event handler for subsequent pagebeforechange requests
     $.mobile.document.on("pagebeforechange",function(e,data){
@@ -168,168 +186,47 @@ $(document)
             $.mobile.silentScroll(0);
         }
     });
+
+    storage.get("profile",function(data){
+        var timeout;
+
+        if (!data.profile) {
+            showDataRequest();
+        } else {
+            profile = data.profile;
+            timeout = setInterval(function(){
+                if (isReady) {
+                    clearInterval(timeout);
+                    startScan();
+                }
+            },100);
+        }
+    });
 })
 .on("resume",function(){
 // Handle OS resume event triggered by PhoneGap
-    var page = $(".ui-page-active").attr("id");
 })
 .on("pause",function(){
 //Handle OS pause
 })
-.on("pageshow",function(e){
-    var newpage = "#"+e.target.id,
-        $newpage = $(newpage);
-
-    // Fix issues between jQuery Mobile and FastClick
-    fixInputClick($newpage);
-
-    if (newpage === "#signin") {
-        // Bind event handler to open panel when swiping on the main page
-        $newpage.off("swiperight").on("swiperight", function() {
-            if ($(".ui-page-active").jqmData("panel") !== "open" && !$(".ui-page-active .ui-popup-active").length) {
-                open_panel();
-            }
-        });
-    }
-})
-.on("popupbeforeposition","#localization",check_curr_lang);
+.on("popupbeforeposition","#localization",checkCurrLang);
 
 //Set AJAX timeout
 $.ajaxSetup({
-    timeout: 6000
+    timeout: 10000
 });
 
+// Show page requesting typical user information
+function showDataRequest() {
+
+}
+
+// Load bar code scanner and process sign in
+function startScan() {
+    showError("Invalid URL");
+}
+
 // Accessory functions for jQuery Mobile
-function areYouSure(text1, text2, callback) {
-    var popup = $(
-        "<div data-role='popup' data-overlay-theme='b' id='sure'>"+
-            "<h3 class='sure-1 center'>"+text1+"</h3>"+
-            "<p class='sure-2 center'>"+text2+"</p>"+
-            "<a class='sure-do ui-btn ui-btn-b ui-corner-all ui-shadow' href='#'>"+_("Yes")+"</a>"+
-            "<a class='sure-dont ui-btn ui-corner-all ui-shadow' href='#'>"+_("No")+"</a>"+
-        "</div>"
-    );
-
-    //Bind buttons
-    popup.find(".sure-do").one("click.sure", function() {
-        $("#sure").popup("close");
-        callback();
-        return false;
-    });
-    popup.find(".sure-dont").one("click.sure", function() {
-        $("#sure").popup("close");
-        return false;
-    });
-
-    popup.one("popupafterclose", function(){
-        $(this).popup("destroy").remove();
-    }).enhanceWithin();
-
-    $(".ui-page-active").append(popup);
-
-    $("#sure").popup({history: false, positionTo: "window"}).popup("open");
-}
-
-function showDurationBox(seconds,title,callback,maximum,granularity) {
-    $("#durationBox").popup("destroy").remove();
-
-    title = title || "Duration";
-    callback = callback || function(){};
-    granularity = granularity || 0;
-
-    var keys = ["days","hours","minutes","seconds"],
-        text = [_("Days"),_("Hours"),_("Minutes"),_("Seconds")],
-        conv = [86400,3600,60,1],
-        total = 4 - granularity,
-        start = 0,
-        arr = sec2dhms(seconds),
-        i;
-
-    if (maximum) {
-        for (i=conv.length-1; i>=0; i--) {
-            if (maximum < conv[i]) {
-                start = i+1;
-                total = (conv.length - start) - granularity;
-                break;
-            }
-        }
-    }
-
-    var incrbts = "<fieldset class='ui-grid-"+String.fromCharCode(95+(total))+" incr'>",
-        inputs = "<div class='ui-grid-"+String.fromCharCode(95+(total))+" inputs'>",
-        decrbts = "<fieldset class='ui-grid-"+String.fromCharCode(95+(total))+" decr'>",
-        popup = $("<div data-role='popup' id='durationBox' data-theme='a' data-overlay-theme='b'>" +
-            "<div data-role='header' data-theme='b'>" +
-                "<h1>"+title+"</h1>" +
-            "</div>" +
-            "<div class='ui-content'>" +
-                "<span>" +
-                    "<a href='#' class='submit_duration' data-role='button' data-corners='true' data-shadow='true' data-mini='true'>"+_("Set Duration")+"</a>" +
-                "</span>" +
-            "</div>" +
-        "</div>"),
-        changeValue = function(pos,dir){
-            var input = $(popup.find(".inputs input")[pos]),
-                val = parseInt(input.val());
-
-            if ((dir === -1 && val === 0) || (dir === 1 && (getValue() + conv[pos+start]) > maximum)) {
-                return;
-            }
-
-            input.val(val+dir);
-        },
-        getValue = function() {
-            return dhms2sec({
-                "days": parseInt(popup.find(".days").val()) || 0,
-                "hours": parseInt(popup.find(".hours").val()) || 0,
-                "minutes": parseInt(popup.find(".minutes").val()) || 0,
-                "seconds": parseInt(popup.find(".seconds").val()) || 0
-            });
-        };
-
-    for (i=start; i<conv.length - granularity; i++) {
-        incrbts += "<div "+((total > 1) ? "class='ui-block-"+String.fromCharCode(97+i-start)+"'" : "")+"><a href='#'' data-role='button' data-mini='true' data-corners='true' data-icon='plus' data-iconpos='bottom'></a></div>";
-        inputs += "<div "+((total > 1) ? "class='ui-block-"+String.fromCharCode(97+i-start)+"'" : "")+"><label>"+_(text[i])+"</label><input class='"+keys[i]+"' type='number' pattern='[0-9]*' value='"+arr[keys[i]]+"'></div>";
-        decrbts += "<div "+((total > 1) ? "class='ui-block-"+String.fromCharCode(97+i-start)+"'" : "")+"><a href='#' data-role='button' data-mini='true' data-corners='true' data-icon='minus' data-iconpos='bottom'></a></div>";
-    }
-
-    incrbts += "</fieldset>";
-    inputs += "</div>";
-    decrbts += "</fieldset>";
-
-    popup.find("span").prepend(incrbts+inputs+decrbts);
-
-    popup.find(".incr").children().on("vclick",function(){
-        var pos = $(this).index();
-        changeValue(pos,1);
-        return false;
-    });
-
-    popup.find(".decr").children().on("vclick",function(){
-        var pos = $(this).index();
-        changeValue(pos,-1);
-        return false;
-    });
-
-    $(".ui-page-active").append(popup);
-
-    popup
-    .css("max-width","350px")
-    .popup({
-        history: false,
-        "positionTo": "window"
-    })
-    .one("popupafterclose",function(){
-        $(this).popup("destroy").remove();
-    })
-    .on("click",".submit_duration",function(){
-        callback(getValue());
-        popup.popup("close");
-        return false;
-    })
-    .enhanceWithin().popup("open");
-}
-
 function changePage(toPage,opts) {
     opts = opts || {};
     if (toPage.indexOf("#") !== 0) {
@@ -337,20 +234,6 @@ function changePage(toPage,opts) {
     }
 
     $.mobile.pageContainer.pagecontainer("change",toPage,opts);
-}
-
-// Close the panel before page transition to avoid bug in jQM 1.4+
-function changeFromPanel(page) {
-    var $panel = $("#signin-settings");
-    $panel.one("panelclose", function(){
-        changePage("#"+page);
-    });
-    $panel.panel("close");
-}
-
-// Show loading indicator within element(s)
-function showLoading(ele) {
-    $(ele).off("click").html("<p class='ui-icon ui-icon-loading mini-load'></p>");
 }
 
 function goBack(keepIndex) {
@@ -370,7 +253,7 @@ function goBack(keepIndex) {
 }
 
 // show error message
-function showerror(msg,dur) {
+function showError(msg,dur) {
     dur = dur || 2500;
 
     $.mobile.loading("show", {
@@ -381,126 +264,6 @@ function showerror(msg,dur) {
     });
     // hide after delay
     setTimeout(function(){$.mobile.loading("hide");},dur);
-}
-
-// Accessory functions
-function fixInputClick(page) {
-    // Handle Fast Click quirks
-    if (!FastClick.notNeeded(document.body)) {
-        page.find("input[type='checkbox']:not([data-role='flipswitch'])").addClass("needsclick");
-        page.find(".ui-collapsible-heading-toggle").on("click",function(){
-            var heading = $(this);
-
-            setTimeout(function(){
-                heading.removeClass("ui-btn-active");
-            },100);
-        });
-        page.find(".ui-select > .ui-btn").each(function(a,b){
-            var ele = $(b),
-                id = ele.attr("id");
-
-            ele.attr("data-rel","popup");
-            ele.attr("href","#"+id.slice(0,-6)+"listbox");
-        });
-    }
-}
-
-// Insert style string into the DOM
-function insertStyle(style) {
-    var a=document.createElement("style");
-    a.innerHTML=style;
-    document.head.appendChild(a);
-}
-
-// Convert all elements in array to integer
-function parseIntArray(arr) {
-    for(var i=0; i<arr.length; i++) {arr[i] = +arr[i];}
-    return arr;
-}
-
-// Small wrapper to handle Chrome vs localStorage usage
-storage = {
-    get: function(query,callback) {
-        callback = callback || function(){};
-
-        if (isChromeApp) {
-            chrome.storage.local.get(query,callback);
-        } else {
-            var data = {},
-                i;
-
-            if (typeof query === "object") {
-                for (i in query) {
-                    if (query.hasOwnProperty(i)) {
-                        data[query[i]] = localStorage.getItem(query[i]);
-                    }
-                }
-            } else if (typeof query === "string") {
-                data[query] = localStorage.getItem(query);
-            }
-
-            callback(data);
-        }
-    },
-    set: function(query,callback) {
-        callback = callback || function(){};
-
-        if (isChromeApp) {
-            chrome.storage.local.set(query,callback);
-        } else {
-            var i;
-            if (typeof query === "object") {
-                for (i in query) {
-                    if (query.hasOwnProperty(i)) {
-                        localStorage.setItem(i,query[i]);
-                    }
-                }
-            }
-
-            callback(true);
-        }
-    },
-    remove: function(query,callback) {
-        callback = callback || function(){};
-
-        if (isChromeApp) {
-            chrome.storage.local.remove(query,callback);
-        } else {
-            var i;
-
-            if (typeof query === "object") {
-                for (i in query) {
-                    if (query.hasOwnProperty(i)) {
-                        localStorage.removeItem(query[i]);
-                    }
-                }
-            } else if (typeof query === "string") {
-                localStorage.removeItem(query);
-            }
-
-            callback(true);
-        }
-    }
-};
-
-// Add ability to unique sort arrays
-function getUnique(inputArray) {
-    var outputArray = [];
-    for (var i = 0; i < inputArray.length; i++) {
-        if (($.inArray(inputArray[i], outputArray)) === -1) {
-            outputArray.push(inputArray[i]);
-        }
-    }
-    return outputArray;
-}
-
-// pad a single digit with a leading zero
-function pad(number) {
-    var r = String(number);
-    if ( r.length === 1 ) {
-        r = "0" + r;
-    }
-    return r;
 }
 
 //Localization functions
@@ -515,7 +278,7 @@ function _(key) {
     }
 }
 
-function set_lang() {
+function setLang() {
     //Update all static elements to the current language
     $("[data-translate]").text(function() {
         var el = $(this),
@@ -534,10 +297,10 @@ function set_lang() {
     $(".ui-toolbar-back-btn").text(_("Back"));
     $.mobile.toolbar.prototype.options.backBtnText = _("Back");
 
-    check_curr_lang();
+    checkCurrLang();
 }
 
-function update_lang(lang) {
+function updateLang(lang) {
     //Empty out the current language (English is provided as the key)
     language = {};
 
@@ -548,7 +311,7 @@ function update_lang(lang) {
 
             locale = data.lang || navigator.language || navigator.browserLanguage || navigator.systemLanguage || navigator.userLanguage || locale;
 
-            update_lang(locale.substring(0,2));
+            updateLang(locale.substring(0,2));
         });
         return;
     }
@@ -556,17 +319,17 @@ function update_lang(lang) {
     storage.set({"lang":lang});
 
     if (lang === "en") {
-        set_lang();
+        setLang();
         return;
     }
 
     $.getJSON("locale/"+lang+".json",function(store){
         language = store.messages;
-        set_lang();
-    }).fail(set_lang);
+        setLang();
+    }).fail(setLang);
 }
 
-function check_curr_lang() {
+function checkCurrLang() {
     storage.get("lang",function(data){
         $("#localization").find("a").each(function(a,b){
             var item = $(b);
