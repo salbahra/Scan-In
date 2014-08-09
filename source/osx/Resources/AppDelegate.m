@@ -57,9 +57,7 @@
 // This is called as soon as the script environment is ready in the webview
 - (void)webView:(WebView *)sender didClearWindowObject:(WebScriptObject *)windowScriptObject forFrame:(WebFrame *)frame
 {
-    NSString *ip = [self getIPAddress];
-    NSString *networkinterface = [NSString stringWithFormat:@"isOSXApp=true;networkinterface={};", ip];
-    [webView stringByEvaluatingJavaScriptFromString:networkinterface];
+    [webView stringByEvaluatingJavaScriptFromString:@"isOSXApp=true;"];
 }
 
 // Prevent authentication dialog from being presented to the user

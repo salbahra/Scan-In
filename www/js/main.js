@@ -155,7 +155,7 @@ $(document)
         if (data.options.role !== "popup" && !$(".ui-popup-active").length) {
             $.mobile.silentScroll(0);
         }
-
+    });
     //On initial load check if a valid configuration is present
     check_configured(true);
 })
@@ -188,7 +188,6 @@ $(document)
 $.ajaxSetup({
     timeout: 6000
 });
-
 
 // Check configuration
 function check_configured(firstLoad) {

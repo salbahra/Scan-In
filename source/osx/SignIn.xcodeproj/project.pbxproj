@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		F40530A7198326550046DC88 /* SignIn.icns in Resources */ = {isa = PBXBuildFile; fileRef = F40530A6198326550046DC88 /* SignIn.icns */; };
 		F464DC01198ED81E003492F2 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = F464DC00198ED81E003492F2 /* MainMenu.xib */; };
 		F464DC03198ED884003492F2 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = F464DC02198ED884003492F2 /* Credits.rtf */; };
 		F4F83F8D1981E481006B2617 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F4F83F8C1981E481006B2617 /* Cocoa.framework */; };
@@ -15,14 +14,13 @@
 		F4F83FA01981E481006B2617 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F4F83F9F1981E481006B2617 /* AppDelegate.m */; };
 		F4F83FC11981E4AC006B2617 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F4F83FC01981E4AC006B2617 /* WebKit.framework */; };
 		F4F83FCA1981E523006B2617 /* css in Resources */ = {isa = PBXBuildFile; fileRef = F4F83FC51981E523006B2617 /* css */; };
-		F4F83FCB1981E523006B2617 /* img in Resources */ = {isa = PBXBuildFile; fileRef = F4F83FC61981E523006B2617 /* img */; };
 		F4F83FCC1981E523006B2617 /* index.html in Resources */ = {isa = PBXBuildFile; fileRef = F4F83FC71981E523006B2617 /* index.html */; };
 		F4F83FCD1981E523006B2617 /* js in Resources */ = {isa = PBXBuildFile; fileRef = F4F83FC81981E523006B2617 /* js */; };
 		F4F83FCE1981E523006B2617 /* locale in Resources */ = {isa = PBXBuildFile; fileRef = F4F83FC91981E523006B2617 /* locale */; };
+		F4F9010719959BCF00B89AB7 /* icon.icns in Resources */ = {isa = PBXBuildFile; fileRef = F4F9010619959BCF00B89AB7 /* icon.icns */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		F40530A6198326550046DC88 /* SignIn.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = SignIn.icns; path = ../../www/res/osx/icons/SignIn.icns; sourceTree = "<group>"; };
 		F464DC00198ED81E003492F2 /* MainMenu.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MainMenu.xib; sourceTree = "<group>"; };
 		F464DC02198ED884003492F2 /* Credits.rtf */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.rtf; path = Credits.rtf; sourceTree = "<group>"; };
 		F4D9F92A1982F35800405EF0 /* SignIn.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = SignIn.entitlements; sourceTree = "<group>"; };
@@ -39,10 +37,10 @@
 		F4F83FAB1981E481006B2617 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		F4F83FC01981E4AC006B2617 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
 		F4F83FC51981E523006B2617 /* css */ = {isa = PBXFileReference; lastKnownFileType = folder; name = css; path = ../../../www/css; sourceTree = "<group>"; };
-		F4F83FC61981E523006B2617 /* img */ = {isa = PBXFileReference; lastKnownFileType = folder; name = img; path = ../../../www/img; sourceTree = "<group>"; };
 		F4F83FC71981E523006B2617 /* index.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; name = index.html; path = ../../../www/index.html; sourceTree = "<group>"; };
 		F4F83FC81981E523006B2617 /* js */ = {isa = PBXFileReference; lastKnownFileType = folder; name = js; path = ../../../www/js; sourceTree = "<group>"; };
 		F4F83FC91981E523006B2617 /* locale */ = {isa = PBXFileReference; lastKnownFileType = folder; name = locale; path = ../../../www/locale; sourceTree = "<group>"; };
+		F4F9010619959BCF00B89AB7 /* icon.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = icon.icns; path = ../../www/res/osx/icons/icon.icns; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -61,7 +59,7 @@
 		F4F83F801981E481006B2617 = {
 			isa = PBXGroup;
 			children = (
-				F40530A6198326550046DC88 /* SignIn.icns */,
+				F4F9010619959BCF00B89AB7 /* icon.icns */,
 				F4F83F921981E481006B2617 /* Resources */,
 				F4F83F8B1981E481006B2617 /* Frameworks */,
 				F4F83F8A1981E481006B2617 /* Products */,
@@ -113,7 +111,6 @@
 			isa = PBXGroup;
 			children = (
 				F4F83FC51981E523006B2617 /* css */,
-				F4F83FC61981E523006B2617 /* img */,
 				F4F83FC71981E523006B2617 /* index.html */,
 				F4F83FC81981E523006B2617 /* js */,
 				F4F83FC91981E523006B2617 /* locale */,
@@ -188,11 +185,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				F4F83FCE1981E523006B2617 /* locale in Resources */,
+				F4F9010719959BCF00B89AB7 /* icon.icns in Resources */,
 				F4F83FCA1981E523006B2617 /* css in Resources */,
 				F4F83FCD1981E523006B2617 /* js in Resources */,
 				F464DC03198ED884003492F2 /* Credits.rtf in Resources */,
-				F40530A7198326550046DC88 /* SignIn.icns in Resources */,
-				F4F83FCB1981E523006B2617 /* img in Resources */,
 				F4F83FCC1981E523006B2617 /* index.html in Resources */,
 				F464DC01198ED81E003492F2 /* MainMenu.xib in Resources */,
 			);

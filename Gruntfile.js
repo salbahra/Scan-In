@@ -59,6 +59,12 @@ module.exports = function(grunt) {
       }
     },
     shell: {
+      pushEng: {
+        command: "tasks/pusheng.sh"
+      },
+      updateLang: {
+          command: "tasks/updatelang.sh <%= secrets.getLocalization.username %> <%= secrets.getLocalization.password %>"
+      },
       blackberry10: {
           command: "cordova build blackberry10 --release"
       },
