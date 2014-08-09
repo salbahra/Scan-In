@@ -1,6 +1,6 @@
-## SignIn
+## Scan-In
 
-[![Build Status](https://travis-ci.org/salbahra/SignIn.png)](https://travis-ci.org/salbahra/signin)  
+[![Build Status](https://travis-ci.org/salbahra/Scan-In.png)](https://travis-ci.org/salbahra/scan-in)  
 [Official Site][official] | [Support][help] | [Changelog][changelog]  
 &copy; 2013-2014 [Samer Albahra][salbahra] ([@salbahra](https://twitter.com/salbahra))  
 
