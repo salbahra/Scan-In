@@ -1,4 +1,4 @@
-## Scan-In
+## Scan In
 
 [![Build Status](https://travis-ci.org/salbahra/Scan-In.png)](https://travis-ci.org/salbahra/scan-in)  
 [Official Site][official] | [Support][help] | [Changelog][changelog]  
