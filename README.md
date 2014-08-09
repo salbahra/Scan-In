@@ -1,7 +1,6 @@
 ## Scan In
 
-<img align="left" height="96" src="http://albahra.com/scanin/icon.png">[![Build Status](https://travis-ci.org/salbahra/Scan-In.png)](https://travis-ci.org/salbahra/scan-in)  
-[Official Site][official] | [Support][help] | [Changelog][changelog]  
+<img align="left" height="96" src="http://albahra.com/scanin/icon.png">[Official Site][official] | [Support][help] | [Changelog][changelog]  
 &copy; 2013-2014 [Samer Albahra][salbahra] ([@salbahra](https://twitter.com/salbahra))  
 
 Designed to allow quick and easy sign in to Google spreadsheet based QR codes.
