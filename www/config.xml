@@ -2,7 +2,7 @@
     <widget xmlns = "http://www.w3.org/ns/widgets"
             xmlns:android   = "http://schemas.android.com/apk/res/android"
             xmlns:gap   = "http://phonegap.com/ns/1.0"
-            id          = "com.albahra.signin"
+            id          = "com.albahra.scanin"
             version     = "1.0.0"
             versionCode = "1" >
 
@@ -20,12 +20,12 @@
         <gap:plugin name="org.apache.cordova.inappbrowser" />
         <gap:plugin name="org.apache.cordova.splashscreen" />
         <gap:plugin name="com.phonegap.plugins.barcodescanner" />
-        
+
         <gap:config-file platform="android" parent="/manifest">
             <uses-sdk android:minSdkVersion="10" android:targetSdkVersion="19" />
         </gap:config-file>
 
-        <name>SignIn</name>
+        <name>Scan-In</name>
 
         <description>
             Designed to allow quick and easy sign in to Google spreadsheet based QR codes.
