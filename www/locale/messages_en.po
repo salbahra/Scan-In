@@ -1,0 +1,29 @@
+msgid "Yes"
+msgstr ""
+
+msgid "No"
+msgstr ""
+
+msgid "Days"
+msgstr ""
+
+msgid "Hours"
+msgstr ""
+
+msgid "Minutes"
+msgstr ""
+
+msgid "Seconds"
+msgstr ""
+
+msgid "Set Duration"
+msgstr ""
+
+msgid "Back"
+msgstr ""
+
+msgid "Scan In"
+msgstr ""
+
+msgid "About"
+msgstr ""
