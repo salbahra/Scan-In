@@ -1,22 +1,67 @@
-msgid "Yes"
+msgid "Welcome to Scan-In"
 msgstr ""
 
-msgid "No"
+msgid ""
+"In order to facilitate a quicker login your information will be collected "
+"and saved to your device for future use. After this initial setup you will "
+"be greeted with the barcode scanner to finish your sign-in."
 msgstr ""
 
-msgid "Days"
+msgid "Last Name"
 msgstr ""
 
-msgid "Hours"
+msgid "First Name"
 msgstr ""
 
-msgid "Minutes"
+msgid "Credentials"
 msgstr ""
 
-msgid "Seconds"
+msgid "MD"
 msgstr ""
 
-msgid "Set Duration"
+msgid "DO"
+msgstr ""
+
+msgid "PhD"
+msgstr ""
+
+msgid "PharmD"
+msgstr ""
+
+msgid "LVN"
+msgstr ""
+
+msgid "RN"
+msgstr ""
+
+msgid "PA"
+msgstr ""
+
+msgid "MT/CLS/MLS"
+msgstr ""
+
+msgid "Other"
+msgstr ""
+
+msgid "Position"
+msgstr ""
+
+msgid "Faculty"
+msgstr ""
+
+msgid "Fellow"
+msgstr ""
+
+msgid "Resident"
+msgstr ""
+
+msgid "Student"
+msgstr ""
+
+msgid "Staff"
+msgstr ""
+
+msgid "Email Address"
 msgstr ""
 
 msgid "Back"
