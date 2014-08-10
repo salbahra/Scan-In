@@ -232,6 +232,9 @@ $(document)
 .on("pause",function(){
 //Handle OS pause
 })
+.one("pageshow","#start",function(){
+    fixInputClick($("#start"));
+})
 .on("popupbeforeposition","#localization",checkCurrLang);
 
 //Set AJAX timeout
@@ -306,6 +309,8 @@ function showDataRequest() {
     page.one("pagehide",function(){
         page.remove();
     });
+
+    fixInputClick(page);
 
     page.appendTo("body");
 }
@@ -394,6 +399,7 @@ function startScan() {
     }
 }
 
+// Accessory functions
 function updateStartMenu() {
     var page = $("#start"),
         info = page.find("a[href='#dataRequest']").parent(),
@@ -401,6 +407,27 @@ function updateStartMenu() {
 
     info.removeClass("ui-last-child").find("a").text(_("Edit Information"));
     scan.show();
+}
+
+function fixInputClick(page) {
+    // Handle Fast Click quirks
+    if (!FastClick.notNeeded(document.body)) {
+        page.find("input[type='checkbox']:not([data-role='flipswitch'])").addClass("needsclick");
+        page.find(".ui-collapsible-heading-toggle").on("click",function(){
+            var heading = $(this);
+
+            setTimeout(function(){
+                heading.removeClass("ui-btn-active");
+            },100);
+        });
+        page.find(".ui-select > .ui-btn").each(function(a,b){
+            var ele = $(b),
+                id = ele.attr("id");
+
+            ele.attr("data-rel","popup");
+            ele.attr("href","#"+id.slice(0,-6)+"listbox");
+        });
+    }
 }
 
 // Accessory functions for jQuery Mobile
