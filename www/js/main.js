@@ -132,6 +132,12 @@ $(document)
             return false;
         });
     }
+
+    $("#startScan").on("click",function(){
+        startScan();
+        $(this).removeClass("ui-btn-active");
+        return false;
+    });
 })
 .one("deviceready", function() {
     try {
@@ -202,9 +208,6 @@ $(document)
         // Cycle through page possbilities and call their init functions
         if (hash === "#dataRequest") {
             showDataRequest();
-        } else if (hash === "#startScan") {
-            startScan();
-            return false;
         }
     });
 
@@ -295,7 +298,7 @@ function showDataRequest() {
         return false;
     });
 
-    form.on("vclick","input[type='reset']",function(){
+    form.on("click","input[type='reset']",function(){
         changePage("#start");
         return false;
     });
@@ -312,7 +315,6 @@ function startScan() {
     if (typeof cordova === "object" && typeof cordova.plugins.barcodeScanner === "object") {
         cordova.plugins.barcodeScanner.scan(
             function (result) {
-
                 // If user canceled then return to start page
                 if (result.cancelled) {
                     return;
@@ -359,7 +361,7 @@ function startScan() {
 function updateStartMenu() {
     var page = $("#start"),
         info = page.find("a[href='#dataRequest']").parent(),
-        scan = page.find("a[href='#startScan']").parent();
+        scan = page.find("#startScan").parent();
 
     info.removeClass("ui-last-child").find("a").text(_("Edit Information"));
     scan.show();
