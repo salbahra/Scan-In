@@ -1,21 +1,21 @@
-/*global $, Windows, MSApp, navigator, FastClick, StatusBar */
+/*global $, Windows, MSApp, navigator, cordova, FastClick, StatusBar, escape */
 var isIEMobile = /IEMobile/.test(navigator.userAgent),
     isAndroid = /Android|\bSilk\b/.test(navigator.userAgent),
     isiOS = /iP(ad|hone|od)/.test(navigator.userAgent),
     isWinApp = /MSAppHost/.test(navigator.userAgent),
     dataMap = {
         "UTHSCSA Path": {
-            "url": "1nFoopM5XypmrT7cNqj-fTqEcmQZHaDvEK7i-Mhop72s",
-            "firstname": "entry.633310717",
-            "lastname": "entry.1715584554",
-            "date": "entry.815042391",
-            "degree": "entry.814824929",
-            "position": "entry.216358567",
-            "didPresent": "entry.1760828830",
-            "coi": "entry.1076657857",
-            "email": "entry.286574492",
+            "id": "dHp1cWFIUjFGbWN5VVBTNDZPMEhTSlE6MA",
+            "firstname": "entry.2.single",
+            "lastname": "entry.5.single",
+            "date": "entry.8.single",
+            "degree": "entry.6.group",
+            "position": "entry.9.group",
+            "didPresent": "entry.11.group",
+            "coi": "entry.13.group",
+            "email": "entry.10.single",
             "other": {
-                "Laboratory Medicine Report": "entry.1618154910"
+                "entry.18.group": "Laboratory Medicine Report"
             }
         }
     },
@@ -168,7 +168,7 @@ $(document)
     $.mobile.hoverDelay = 0;
     $.mobile.hashListeningEnabled = false;
 })
-.one("pagebeforechange", function(event) {
+.one("pagebeforechange", function() {
     // Bind the event handler for subsequent pagebeforechange requests
     $.mobile.document.on("pagebeforechange",function(e,data){
         var page = data.toPage,
@@ -320,18 +320,50 @@ function startScan() {
                     return;
                 }
 
-                var formID = result.match(/https?:\/\/docs.google.com\/forms\/d\/(.+)\/viewform/),
-                    hasMatch = false;
+                var signIn = function() {
+                        // Submit sign in to Google
+                        $.get("https://spreadsheets.google.com/spreadsheet/formResponse?formkey="+formKey[1]+"&"+data,function(result){
+                            // Handle response
+                            console.log(result);
+                        });
+                    },
+                    getData = function(didPresent,coi) {
+                        var coiMap = ["Not applicable, I did not present","No","Yes, explained in the presentation"],
+                            key;
 
-                if (typeof formID[1] !== "string") {
+                        didPresent = didPresent ? "Yes" : "No";
+                        coi = coiMap[coi];
+
+                        for (key in dataMap[form]) {
+                            if (dataMap[form].hasOwnProperty(key) && profile.hasOwnProperty(key)) {
+                                data += dataMap[form][key]+"="+escape(profile[key])+"&";
+                            }
+                        }
+
+                        if (typeof dataMap[form].other === "object") {
+                            for (key in dataMap[form].other) {
+                                if (dataMap[form].other.hasOwnProperty(key)) {
+                                    data += key+"="+escape(dataMap[form].other[key])+"&";
+                                }
+                            }
+                        }
+
+                        data += dataMap[form].didPresent + "=" + didPresent + "&";
+                        data += dataMap[form].coi + "=" + coi;
+                    },
+                    formKey = $.mobile.path.parseUrl(result).hrefNoHash.match(/https?:\/\/docs.google.com\/spreadsheet\/viewform\?formkey=(.*)/),
+                    hasMatch = false,
+                    data = "",
+                    form;
+
+                if (typeof formKey[1] !== "string") {
                     showError(_("A Google form was not identified within the barcode. Please ensure the correct barcode has been scanned."));
                     return;
                 }
 
                 for (form in dataMap) {
-                    if (dataMap.hasOwnProperty(form) && dataMap[form].url === formID[1]) {
+                    if (dataMap.hasOwnProperty(form) && dataMap[form].id === formKey[1]) {
                         hasMatch = true;
-                        alert(form);
                         break;
                     }
                 }
@@ -342,14 +374,18 @@ function startScan() {
                 }
 
                 // Ask for presenting today and if so, any conflict of interest
-
-
-                // Submit sign in to Google
-                $.get("https://docs.google.com/forms/d/"+formID+"/submitform?",function(result){
-                    // Handle response
-                });
+                areYouSure(_("Did You Present Today?")).then(
+                    function(){
+                        getData(true,1);
+                        signIn();
+                    },
+                    function(){
+                        getData(false,0);
+                        signIn();
+                    }
+                );
             },
-            function(error) {
+            function() {
                 showError(_("Unable to open the camera on your device. Please ensure the camera is working and try again."));
             }
         );
@@ -368,6 +404,40 @@ function updateStartMenu() {
 }
 
 // Accessory functions for jQuery Mobile
+function areYouSure(question, helptext) {
+    var popup = $(
+        "<div data-role='popup' data-overlay-theme='b' id='sure'>"+
+            "<h3 class='sure-1 center'>"+question+"</h3>"+
+            "<p class='sure-2 center'>"+helptext+"</p>"+
+            "<a class='sure-do ui-btn ui-btn-b ui-corner-all ui-shadow' href='#'>"+_("Yes")+"</a>"+
+            "<a class='sure-dont ui-btn ui-corner-all ui-shadow' href='#'>"+_("No")+"</a>"+
+        "</div>"
+    ),
+    dfd = new $.Deferred();
+
+    //Bind buttons
+    popup.find(".sure-do").one("click.sure", function() {
+        $("#sure").popup("close");
+        dfd.resolve();
+        return false;
+    });
+    popup.find(".sure-dont").one("click.sure", function() {
+        $("#sure").popup("close");
+        dfd.reject();
+        return false;
+    });
+
+    popup.one("popupafterclose", function(){
+        $(this).popup("destroy").remove();
+    }).enhanceWithin();
+
+    $(".ui-page-active").append(popup);
+
+    $("#sure").popup({history: false, positionTo: "window"}).popup("open");
+
+    return dfd.promise();
+}
+
 function changePage(toPage,opts) {
     opts = opts || {};
     if (toPage.indexOf("#") !== 0) {
