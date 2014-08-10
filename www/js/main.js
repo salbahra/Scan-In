@@ -3,6 +3,22 @@ var isIEMobile = /IEMobile/.test(navigator.userAgent),
     isAndroid = /Android|\bSilk\b/.test(navigator.userAgent),
     isiOS = /iP(ad|hone|od)/.test(navigator.userAgent),
     isWinApp = /MSAppHost/.test(navigator.userAgent),
+    dataMap = {
+        "UTHSCSA Path": {
+            "url": "1nFoopM5XypmrT7cNqj-fTqEcmQZHaDvEK7i-Mhop72s",
+            "firstname": "entry.633310717",
+            "lastname": "entry.1715584554",
+            "date": "entry.815042391",
+            "degree": "entry.814824929",
+            "position": "entry.216358567",
+            "didPresent": "entry.1760828830",
+            "coi": "entry.1076657857",
+            "email": "entry.286574492",
+            "other": {
+                "Laboratory Medicine Report": "entry.1618154910"
+            }
+        }
+    },
     isReady = false,
     profile, storage, language;
 
@@ -185,13 +201,18 @@ $(document)
         if (data.options.role !== "popup" && !$(".ui-popup-active").length) {
             $.mobile.silentScroll(0);
         }
+
+        // Cycle through page possbilities and call their init functions
+        if (hash === "#dataRequest") {
+            showDataRequest();
+        }
     });
 
     storage.get("profile",function(data){
         var timeout;
 
         if (!data.profile) {
-            showDataRequest();
+            changePage("#dataRequest");
         } else {
             profile = data.profile;
             timeout = setInterval(function(){
@@ -218,12 +239,70 @@ $.ajaxSetup({
 
 // Show page requesting typical user information
 function showDataRequest() {
+    var page = $("<div data-role='page' id='dataRequest'>" +
+            "<div class='ui-content' role='main'>" +
+                "<p class='center'>"+_("Welcome to Scan-In")+"</p>" +
+                "<p class='center smaller rain-desc'>"+_("In order to facilitate a quicker login your information will be collected and saved to your device for future use. After this initial setup you will be greeted with the barcode scanner to finish your sign-in.")+"</p>" +
+                "<ul data-role='listview' data-inset='true'>" +
+                    "<li><div class='ui-field-contain'><fieldset><form>" +
+                        "<label for='lastname'>"+_("Last Name")+"</label><input data-mini='true' type='text' max='255' name='lastname' id='lastname' />" +
+                        "<label for='firstname'>"+_("First Name")+"</label><input data-mini='true' type='text' max='255' name='firstname' id='firstname' />" +
+                        "<label for='degree'>"+_("Credentials")+"</label><select data-mini='true' name='degree' id='degree'>" +
+                            "<option value='MD'>"+_("MD")+"</option>" +
+                            "<option value='DO'>"+_("DO")+"</option>" +
+                            "<option value='PhD'>"+_("PhD")+"</option>" +
+                            "<option value='PharmD'>"+_("PharmD")+"</option>" +
+                            "<option value='LVN'>"+_("LVN")+"</option>" +
+                            "<option value='RN'>"+_("RN")+"</option>" +
+                            "<option value='PA'>"+_("PA")+"</option>" +
+                            "<option value='MT/CLS/MLS'>"+_("MT/CLS/MLS")+"</option>" +
+                            "<option value='Other'>"+_("Other")+"</option>" +
+                        "</select>" +
+                        "<label for='position'>"+_("Position")+"</label><select data-mini='true' name='position' id='position'>" +
+                            "<option value='Faculty'>"+_("Faculty")+"</option>" +
+                            "<option value='Fellow'>"+_("Fellow")+"</option>" +
+                            "<option value='Resident'>"+_("Resident")+"</option>" +
+                            "<option value='Student'>"+_("Student")+"</option>" +
+                            "<option value='Staff'>"+_("Staff")+"</option>" +
+                            "<option value='Other'>"+_("Other")+"</option>" +
+                        "</select>" +
+                        "<label for='email'>"+_("Email Address")+"</label><input data-mini='true' type='email' max='255' name='email' id='email' />" +
+                        "<input type='submit' data-mini='true' value='Submit' />" +
+                    "</form></fieldset></div></li>" +
+                "</ul>" +
+            "</div>" +
+        "</div>"),
+        form = page.find("form");
 
+    form.on("submit",function(){
+        var data = form.serializeArray(),
+            profile = {},
+            i;
+
+        for (i=0; i<data.length; i++) {
+            profile[data[i].name] = data[i].value;
+        }
+
+        storage.set({
+            "profile": JSON.stringify(profile)
+        }, function(){
+            changePage("#start");
+            page.one("pagehide",startScan);
+        });
+
+        return false;
+    });
+
+    page.one("pagehide",function(){
+        page.remove();
+    });
+
+    page.appendTo("body");
 }
 
 // Load bar code scanner and process sign in
 function startScan() {
-    showError("Invalid URL");
+
 }
 
 // Accessory functions for jQuery Mobile
@@ -237,10 +316,9 @@ function changePage(toPage,opts) {
 }
 
 function goBack(keepIndex) {
-    var page = $(".ui-page-active").attr("id"),
-        managerStart = (page === "site-control" && !$("#site-control").find(".ui-btn-left").is(":visible"));
+    var page = $(".ui-page-active").attr("id");
 
-    if (page === "signin" || page === "start" || managerStart) {
+    if (page === "start") {
         navigator.app.exitApp();
     } else {
         changePage($.mobile.navigate.history.getPrev().url);
