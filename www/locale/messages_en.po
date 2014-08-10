@@ -64,10 +64,53 @@ msgstr ""
 msgid "Email Address"
 msgstr ""
 
+msgid ""
+"A Google form was not identified within the barcode. Please ensure the "
+"correct barcode has been scanned."
+msgstr ""
+
+msgid ""
+"This URL is not for a known form. Please contact the developer for "
+"assistance."
+msgstr ""
+
+msgid "Did You Present Today?"
+msgstr ""
+
+msgid ""
+"Unable to open the camera on your device. Please ensure the camera is "
+"working and try again."
+msgstr ""
+
+msgid "Your device is currently unsupported for barcode scanning."
+msgstr ""
+
+msgid "Edit Information"
+msgstr ""
+
+msgid "Yes"
+msgstr ""
+
+msgid "No"
+msgstr ""
+
 msgid "Back"
 msgstr ""
 
 msgid "Scan In"
+msgstr ""
+
+msgid ""
+"Welcome to Scan In. This app makes it easy to sign in to events via QR codes "
+"without repeatedly typing your personal information. To get started please "
+"hit the button below to enter your personal information to be used for all "
+"future sign-ins."
+msgstr ""
+
+msgid "Enter Information"
+msgstr ""
+
+msgid "Start Scan"
 msgstr ""
 
 msgid "About"
