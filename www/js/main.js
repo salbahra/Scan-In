@@ -137,8 +137,8 @@ $(document)
     try {
         //Change the status bar to match the headers
         StatusBar.overlaysWebView(false);
-        StatusBar.styleLightContent();
-        StatusBar.backgroundColorByHexString("#1C1C1C");
+        StatusBar.styleDefault();
+        StatusBar.backgroundColorByHexString("#F9F9F9");
     } catch (err) {}
 
     // Hide the splash screen
@@ -163,9 +163,6 @@ $(document)
     $.mobile.hashListeningEnabled = false;
 })
 .one("pagebeforechange", function(event) {
-    // Let the framework know we're going to handle the first load
-    event.preventDefault();
-
     // Bind the event handler for subsequent pagebeforechange requests
     $.mobile.document.on("pagebeforechange",function(e,data){
         var page = data.toPage,
@@ -205,16 +202,18 @@ $(document)
         // Cycle through page possbilities and call their init functions
         if (hash === "#dataRequest") {
             showDataRequest();
+        } else if (hash === "#startScan") {
+            startScan();
+            return false;
         }
     });
 
     storage.get("profile",function(data){
         var timeout;
 
-        if (!data.profile) {
-            changePage("#dataRequest");
-        } else {
-            profile = data.profile;
+        if (data.profile) {
+            profile = JSON.parse(data.profile);
+            updateStartMenu();
             timeout = setInterval(function(){
                 if (isReady) {
                     clearInterval(timeout);
@@ -245,29 +244,30 @@ function showDataRequest() {
                 "<p class='center smaller rain-desc'>"+_("In order to facilitate a quicker login your information will be collected and saved to your device for future use. After this initial setup you will be greeted with the barcode scanner to finish your sign-in.")+"</p>" +
                 "<ul data-role='listview' data-inset='true'>" +
                     "<li><div class='ui-field-contain'><fieldset><form>" +
-                        "<label for='lastname'>"+_("Last Name")+"</label><input data-mini='true' type='text' max='255' name='lastname' id='lastname' />" +
-                        "<label for='firstname'>"+_("First Name")+"</label><input data-mini='true' type='text' max='255' name='firstname' id='firstname' />" +
+                        "<label for='lastname'>"+_("Last Name")+"</label><input data-mini='true' type='text' max='255' name='lastname' id='lastname' value='"+profile.lastname+"' />" +
+                        "<label for='firstname'>"+_("First Name")+"</label><input data-mini='true' type='text' max='255' name='firstname' id='firstname' value='"+profile.firstname+"' />" +
                         "<label for='degree'>"+_("Credentials")+"</label><select data-mini='true' name='degree' id='degree'>" +
-                            "<option value='MD'>"+_("MD")+"</option>" +
-                            "<option value='DO'>"+_("DO")+"</option>" +
-                            "<option value='PhD'>"+_("PhD")+"</option>" +
-                            "<option value='PharmD'>"+_("PharmD")+"</option>" +
-                            "<option value='LVN'>"+_("LVN")+"</option>" +
-                            "<option value='RN'>"+_("RN")+"</option>" +
-                            "<option value='PA'>"+_("PA")+"</option>" +
-                            "<option value='MT/CLS/MLS'>"+_("MT/CLS/MLS")+"</option>" +
-                            "<option value='Other'>"+_("Other")+"</option>" +
+                            "<option "+(profile.degree==="MD" ? "selected " : "")+"value='MD'>"+_("MD")+"</option>" +
+                            "<option "+(profile.degree==="DO" ? "selected " : "")+"value='DO'>"+_("DO")+"</option>" +
+                            "<option "+(profile.degree==="PhD" ? "selected " : "")+"value='PhD'>"+_("PhD")+"</option>" +
+                            "<option "+(profile.degree==="PharmD" ? "selected " : "")+"value='PharmD'>"+_("PharmD")+"</option>" +
+                            "<option "+(profile.degree==="LVN" ? "selected " : "")+"value='LVN'>"+_("LVN")+"</option>" +
+                            "<option "+(profile.degree==="RN" ? "selected " : "")+"value='RN'>"+_("RN")+"</option>" +
+                            "<option "+(profile.degree==="PA" ? "selected " : "")+"value='PA'>"+_("PA")+"</option>" +
+                            "<option "+(profile.degree==="MT/CLS/MLS" ? "selected " : "")+"value='MT/CLS/MLS'>"+_("MT/CLS/MLS")+"</option>" +
+                            "<option "+(profile.degree==="Other" ? "selected " : "")+"value='Other'>"+_("Other")+"</option>" +
                         "</select>" +
                         "<label for='position'>"+_("Position")+"</label><select data-mini='true' name='position' id='position'>" +
-                            "<option value='Faculty'>"+_("Faculty")+"</option>" +
-                            "<option value='Fellow'>"+_("Fellow")+"</option>" +
-                            "<option value='Resident'>"+_("Resident")+"</option>" +
-                            "<option value='Student'>"+_("Student")+"</option>" +
-                            "<option value='Staff'>"+_("Staff")+"</option>" +
-                            "<option value='Other'>"+_("Other")+"</option>" +
+                            "<option "+(profile.position==="Faculty" ? "selected " : "")+"value='Faculty'>"+_("Faculty")+"</option>" +
+                            "<option "+(profile.position==="Fellow" ? "selected " : "")+"value='Fellow'>"+_("Fellow")+"</option>" +
+                            "<option "+(profile.position==="Resident" ? "selected " : "")+"value='Resident'>"+_("Resident")+"</option>" +
+                            "<option "+(profile.position==="Student" ? "selected " : "")+"value='Student'>"+_("Student")+"</option>" +
+                            "<option "+(profile.position==="Staff" ? "selected " : "")+"value='Staff'>"+_("Staff")+"</option>" +
+                            "<option "+(profile.position==="Other" ? "selected " : "")+"value='Other'>"+_("Other")+"</option>" +
                         "</select>" +
-                        "<label for='email'>"+_("Email Address")+"</label><input data-mini='true' type='email' max='255' name='email' id='email' />" +
+                        "<label for='email'>"+_("Email Address")+"</label><input data-mini='true' type='email' max='255' name='email' id='email' value='"+profile.email+"' />" +
                         "<input type='submit' data-mini='true' value='Submit' />" +
+                        "<input type='reset' data-theme='b' data-mini='true' value='Cancel' />" +
                     "</form></fieldset></div></li>" +
                 "</ul>" +
             "</div>" +
@@ -276,7 +276,6 @@ function showDataRequest() {
 
     form.on("submit",function(){
         var data = form.serializeArray(),
-            profile = {},
             i;
 
         for (i=0; i<data.length; i++) {
@@ -286,10 +285,18 @@ function showDataRequest() {
         storage.set({
             "profile": JSON.stringify(profile)
         }, function(){
-            changePage("#start");
+            updateStartMenu();
             page.one("pagehide",startScan);
+            changePage("#start",{
+                transition: "none"
+            });
         });
 
+        return false;
+    });
+
+    form.on("vclick","input[type='reset']",function(){
+        changePage("#start");
         return false;
     });
 
@@ -302,18 +309,60 @@ function showDataRequest() {
 
 // Load bar code scanner
 function startScan() {
-    cordova.plugins.barcodeScanner.scan(
-        function (result) {
-            alert("We got a barcode\n" +
-                "Result: " + result.text + "\n" +
-                "Format: " + result.format + "\n" +
-                "Cancelled: " + result.cancelled
-            );
-        },
-        function (error) {
-            alert("Scanning failed: " + error);
-        }
-    );
+    if (typeof cordova === "object" && typeof cordova.plugins.barcodeScanner === "object") {
+        cordova.plugins.barcodeScanner.scan(
+            function (result) {
+
+                // If user canceled then return to start page
+                if (result.cancelled) {
+                    return;
+                }
+
+                var formID = result.match(/https?:\/\/docs.google.com\/forms\/d\/(.+)\/viewform/),
+                    hasMatch = false;
+
+                if (typeof formID[1] !== "string") {
+                    showError(_("A Google form was not identified within the barcode. Please ensure the correct barcode has been scanned."));
+                    return;
+                }
+
+                for (form in dataMap) {
+                    if (dataMap.hasOwnProperty(form) && dataMap[form].url === formID[1]) {
+                        hasMatch = true;
+                        alert(form);
+                        break;
+                    }
+                }
+
+                if (!hasMatch) {
+                    showError(_("This URL is not for a known form. Please contact the developer for assistance."));
+                    return;
+                }
+
+                // Ask for presenting today and if so, any conflict of interest
+
+
+                // Submit sign in to Google
+                $.get("https://docs.google.com/forms/d/"+formID+"/submitform?",function(result){
+                    // Handle response
+                });
+            },
+            function(error) {
+                showError(_("Unable to open the camera on your device. Please ensure the camera is working and try again."));
+            }
+        );
+    } else {
+        showError(_("Your device is currently unsupported for barcode scanning."));
+    }
+}
+
+function updateStartMenu() {
+    var page = $("#start"),
+        info = page.find("a[href='#dataRequest']").parent(),
+        scan = page.find("a[href='#startScan']").parent();
+
+    info.removeClass("ui-last-child").find("a").text(_("Edit Information"));
+    scan.show();
 }
 
 // Accessory functions for jQuery Mobile

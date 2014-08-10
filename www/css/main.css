@@ -34,6 +34,12 @@ a {
     margin:0 auto!important;
     opacity:.18
 }
+.help-text {
+    word-wrap:normal;
+    white-space:normal!important;
+    overflow:visible!important;
+    text-align:center
+}
 .center {
     text-align:center!important
 }
@@ -45,4 +51,12 @@ a {
     #sure {
         width:250px
     }
+}
+#start ul {
+    width:250px;
+    margin:0 auto;
+    left:0;
+    right:0;
+    position:absolute;
+    top:15%
 }
