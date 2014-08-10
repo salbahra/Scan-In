@@ -324,7 +324,7 @@ function startScan() {
                         // Submit sign in to Google
                         $.get("https://spreadsheets.google.com/spreadsheet/formResponse?formkey="+formKey[1]+"&"+data,function(result){
                             // Handle response
-                            console.log(result);
+                            showError("Success:" + result,8000);
                         });
                     },
                     getData = function(didPresent,coi) {
