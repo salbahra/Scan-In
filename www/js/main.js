@@ -356,13 +356,13 @@ function startScan() {
                         data += dataMap[form].didPresent + "=" + didPresent + "&";
                         data += dataMap[form].coi + "=" + coi;
                     },
-                    formKey = $.mobile.path.parseUrl(result.text).hrefNoHash.match(/https?:\/\/docs.google.com\/spreadsheet\/viewform\?formkey=(.*)/),
+                    formKey = $.mobile.path.parseUrl(result.text).hrefNoHash.match(/https?:\/\/docs.google.com\/spreadsheet\/viewform\?formkey=(.*)/) || [],
                     hasMatch = false,
                     data = "",
                     form;
 
                 if (typeof formKey[1] !== "string") {
-                    showError(_("A Google form was not identified within the barcode. Please ensure the correct barcode has been scanned."));
+                    showError(_("A Google form was not identified within the barcode. Please ensure the correct barcode has been scanned."),3000);
                     return;
                 }
 
@@ -374,7 +374,7 @@ function startScan() {
                 }
 
                 if (!hasMatch) {
-                    showError(_("This URL is not for a known form. Please contact the developer for assistance."));
+                    showError(_("This URL is not for a known form. Please contact the developer for assistance."),3000);
                     return;
                 }
 
@@ -391,7 +391,7 @@ function startScan() {
                 );
             },
             function() {
-                showError(_("Unable to open the camera on your device. Please ensure the camera is working and try again."));
+                showError(_("Unable to open the camera on your device. Please ensure the camera is working and try again."),4000);
             }
         );
     } else {
