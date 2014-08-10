@@ -327,9 +327,9 @@ function startScan() {
 
                 var signIn = function() {
                         // Submit sign in to Google
-                        $.get("https://spreadsheets.google.com/spreadsheet/formResponse?formkey="+formKey[1]+"&"+data,function(result){
-                            // Handle response
-                            showError("Success:" + result,8000);
+                        $.get("https://spreadsheets.google.com/spreadsheet/formResponse?formkey="+formKey[1]+"&"+data,function(){
+                            // Show success
+                            showError("Success!",8000);
                         });
                     },
                     getData = function(didPresent,coi) {
@@ -356,7 +356,7 @@ function startScan() {
                         data += dataMap[form].didPresent + "=" + didPresent + "&";
                         data += dataMap[form].coi + "=" + coi;
                     },
-                    formKey = $.mobile.path.parseUrl(result).hrefNoHash.match(/https?:\/\/docs.google.com\/spreadsheet\/viewform\?formkey=(.*)/),
+                    formKey = $.mobile.path.parseUrl(result.text).hrefNoHash.match(/https?:\/\/docs.google.com\/spreadsheet\/viewform\?formkey=(.*)/),
                     hasMatch = false,
                     data = "",
                     form;
@@ -379,7 +379,7 @@ function startScan() {
                 }
 
                 // Ask for presenting today and if so, any conflict of interest
-                areYouSure(_("Did You Present Today?")).then(
+                areYouSure(_("Did You Present Today?"),"").then(
                     function(){
                         getData(true,1);
                         signIn();
