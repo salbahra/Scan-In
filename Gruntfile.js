@@ -33,7 +33,7 @@ module.exports = function(grunt) {
       },
       pushBump: {
           command: [
-            "git add www/index.html www/config.xml manifest.json manifest.webapp package.json",
+            "git add www/index.html www/config.xml package.json",
             "git commit -m 'Base: Increment version number'",
             "git push"
           ].join("&&")
