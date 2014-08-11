@@ -19,21 +19,21 @@
         <div data-role="page" id="start">
             <ul data-role="none" class="ui-listview ui-listview-inset ui-corner-all">
                 <li class="ui-li-static ui-body-inherit ui-first-child ui-last-child ui-li-separate"><p class="help-text" data-translate="Welcome to Scan In. This app makes it easy to sign in to events via QR codes without repeatedly typing your personal information. To get started please hit the button below to enter your personal information to be used for all future sign-ins."></p></li><br>
-                <li class="ui-first-child ui-last-child"><a class="ui-btn ui-btn-icon-right ui-icon-carat-r" href="#dataRequest" data-translate="Enter Information"></a></li>
-                <li class="ui-last-child" style="display:none"><a href="#" class="ui-btn ui-btn-icon-right ui-icon-carat-r" id="startScan" data-translate="Start Scan"></a></li>
+                <li class="ui-first-child"><a class="ui-btn ui-btn-icon-right ui-icon-carat-r" href="#dataRequest" data-translate="Enter Information"></a></li>
+                <li style="display:none"><a href="#" class="ui-btn ui-btn-icon-right ui-icon-carat-r" id="startScan" data-translate="Start Scan"></a></li>
+                <li class="ui-last-child"><a href="#about" class="ui-btn ui-btn-icon-right ui-icon-carat-r" data-translate="About"></a></li>
             </ul>
         </div>
 
         <div data-role="page" id="about">
-            <div data-theme="b" data-role="header" data-position="fixed" data-tap-toggle="false" data-add-back-btn="true">
-                <h3 data-translate="About"></h3>
-            </div>
             <div class="ui-content" role="main">
+                <p class="center" data-translate="About"></p>
                 <ul data-role="listview" data-inset="true">
-                    <li>
-                        <p>This is open source software: source code and changelog for this application can be found at <a class="iab" target="_blank" href="https://github.com/salbahra/Scan-In/">https://github.com/salbahra/Scan-In/</a></p>
-                        <p>Language localization is crowdsourced using Get Localization available at <a class="iab" target="_blank" href="http://www.getlocalization.com/ScanIn/">http://www.getlocalization.com/ScanIn/</a></p>
+                    <li class="center">
+                        <p class="help-text">This is open source software: source code and changelog for this application can be found at <a class="iab" target="_blank" href="https://github.com/salbahra/Scan-In/">https://github.com/salbahra/Scan-In/</a></p>
+                        <p class="help-text">Language localization is crowdsourced using Get Localization available at <a class="iab" target="_blank" href="http://www.getlocalization.com/ScanIn/">http://www.getlocalization.com/ScanIn/</a></p>
                         <p>Version: 1.0.0</p>
+                        <button data-icon="back" data-translate="Back"></button>
                     </li>
                 </ul>
             </div>

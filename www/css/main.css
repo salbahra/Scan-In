@@ -52,7 +52,7 @@ a {
         width:250px
     }
 }
-#start ul {
+#start ul, #about ul {
     width:250px;
     margin:0 auto;
     left:0;

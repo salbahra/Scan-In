@@ -182,24 +182,6 @@ $(document)
 
         hash = $.mobile.path.parseUrl(page).hash;
 
-        if (hash === "#"+currPage.attr("id") && (hash === "#start")) {
-            // Cancel page load when navigating to the same page
-            e.preventDefault();
-
-            // Allow pages to navigate back by adjusting active index in history
-            $.mobile.navigate.history.activeIndex--;
-
-            // Remove the current page from the DOM
-            currPage.remove();
-
-            // Change to page without any animation or history change
-            changePage(hash,{
-                transition: "none",
-                showLoadMsg: false
-            });
-            return;
-        }
-
         // Animations are patchy if the page isn't scrolled to the top. This scrolls the page before the animation fires off
         if (data.options.role !== "popup" && !$(".ui-popup-active").length) {
             $.mobile.silentScroll(0);
@@ -208,6 +190,8 @@ $(document)
         // Cycle through page possbilities and call their init functions
         if (hash === "#dataRequest") {
             showDataRequest();
+        } else if (hash === "#about") {
+            $(hash).find("button[data-icon='back']").one("click",goBack);
         }
     });
 
@@ -273,7 +257,7 @@ function showDataRequest() {
                         "</select>" +
                         "<label for='email'>"+_("Email Address")+"</label><input data-mini='true' type='email' max='255' name='email' id='email' value='"+profile.email+"' />" +
                         "<input type='submit' data-mini='true' value='Submit' />" +
-                        "<input type='reset' data-theme='b' data-mini='true' value='Cancel' />" +
+                        "<button data-theme='b' data-mini='true'>"+_("Cancel")+"</button>" +
                     "</form></fieldset></div></li>" +
                 "</ul>" +
             "</div>" +
@@ -293,16 +277,14 @@ function showDataRequest() {
         }, function(){
             updateStartMenu();
             page.one("pagehide",startScan);
-            changePage("#start",{
-                transition: "none"
-            });
+            goBack();
         });
 
         return false;
     });
 
-    form.on("click","input[type='reset']",function(){
-        changePage("#start");
+    form.on("click","button",function(){
+        goBack();
         return false;
     });
 
@@ -405,7 +387,7 @@ function updateStartMenu() {
         info = page.find("a[href='#dataRequest']").parent(),
         scan = page.find("#startScan").parent();
 
-    info.removeClass("ui-last-child").find("a").text(_("Edit Information"));
+    info.find("a").text(_("Edit Information"));
     scan.show();
 }
 
@@ -474,17 +456,21 @@ function changePage(toPage,opts) {
     $.mobile.pageContainer.pagecontainer("change",toPage,opts);
 }
 
-function goBack(keepIndex) {
-    var page = $(".ui-page-active").attr("id");
+function goBack() {
+    var page = $(".ui-page-active").attr("id"),
+        prev;
 
     if (page === "start") {
         navigator.app.exitApp();
     } else {
-        changePage($.mobile.navigate.history.getPrev().url);
+        prev = $.mobile.navigate.history.getPrev().url;
+        if (prev !== $.mobile.path.parseUrl(prev).hash) {
+            prev = "#start";
+        }
+
+        changePage(prev);
         $.mobile.document.one("pagehide",function(){
-            if (!keepIndex) {
-                $.mobile.navigate.history.activeIndex -= 2;
-            }
+            $.mobile.navigate.history.activeIndex -= 1;
         });
     }
 }
