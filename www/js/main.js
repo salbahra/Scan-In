@@ -171,7 +171,6 @@ $(document)
     // Bind the event handler for subsequent pagebeforechange requests
     $.mobile.document.on("pagebeforechange",function(e,data){
         var page = data.toPage,
-            currPage = $(".ui-page-active"),
             hash;
 
         // Pagebeforechange event triggers twice (before and after) and this check ensures we get the before state
