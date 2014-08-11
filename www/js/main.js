@@ -195,7 +195,6 @@ $(document)
 
     storage.get("profile",function(data){
         var timeout;
-
         if (data.profile) {
             profile = JSON.parse(data.profile);
             updateStartMenu();
@@ -210,6 +209,13 @@ $(document)
 })
 .on("resume",function(){
 // Handle OS resume event triggered by PhoneGap
+    storage.get("profile",function(data){
+        if (data.profile) {
+            profile = JSON.parse(data.profile);
+            updateStartMenu();
+            startScan();
+        }
+    });
 })
 .on("pause",function(){
 //Handle OS pause
