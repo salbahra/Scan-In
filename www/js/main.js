@@ -135,7 +135,6 @@ $(document)
 
     $("#startScan").on("click",function(){
         startScan();
-        $(this).removeClass("ui-btn-active");
         return false;
     });
 })
@@ -165,7 +164,7 @@ $(document)
 .one("mobileinit", function(){
     //After jQuery mobile is loaded set intial configuration
     $.mobile.defaultPageTransition = "none";
-    $.mobile.hoverDelay = 10;
+    $.mobile.activeBtnClass = "disabled";
     $.mobile.hashListeningEnabled = false;
 })
 .one("pagebeforechange", function() {
@@ -395,13 +394,6 @@ function fixInputClick(page) {
     // Handle Fast Click quirks
     if (!FastClick.notNeeded(document.body)) {
         page.find("input[type='checkbox']:not([data-role='flipswitch'])").addClass("needsclick");
-        page.find(".ui-collapsible-heading-toggle").on("click",function(){
-            var heading = $(this);
-
-            setTimeout(function(){
-                heading.removeClass("ui-btn-active");
-            },100);
-        });
         page.find(".ui-select > .ui-btn").each(function(a,b){
             var ele = $(b),
                 id = ele.attr("id");
