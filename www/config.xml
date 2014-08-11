@@ -22,7 +22,7 @@
         <gap:plugin name="com.phonegap.plugins.barcodescanner" />
 
         <gap:config-file platform="android" parent="/manifest">
-            <uses-sdk android:minSdkVersion="10" android:targetSdkVersion="19" />
+            <uses-sdk android:minSdkVersion="11" android:targetSdkVersion="19" />
         </gap:config-file>
 
         <name>Scan-In</name>
