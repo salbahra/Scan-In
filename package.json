@@ -1,6 +1,6 @@
 {
   "name": "Scan-In",
-  "version": "1.0.0",
+  "version": "1.0.1-pre",
   "description": "Designed to allow quick and easy sign in to Google spreadsheet based QR codes.",
   "main": "www/js/main.js",
   "scripts": {
