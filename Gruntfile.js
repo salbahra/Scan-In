@@ -78,7 +78,7 @@ module.exports = function(grunt) {
         }]
       },
       manifests: {
-        src: ["manifest.json","manifest.webapp","package.json"],
+        src: ["package.json"],
         overwrite: true,
         replacements: [{
           from: /"version": "([\d|\.]+)(-pre)?"/g,
