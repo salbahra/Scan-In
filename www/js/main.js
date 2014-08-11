@@ -229,7 +229,7 @@ $.ajaxSetup({
 function showDataRequest() {
     var page = $("<div data-role='page' id='dataRequest'>" +
             "<div class='ui-content' role='main'>" +
-                "<p class='center'>"+_("Welcome to Scan-In")+"</p>" +
+                "<p class='center'>"+_("User Information")+"</p>" +
                 "<p class='center smaller rain-desc'>"+_("In order to facilitate a quicker login your information will be collected and saved to your device for future use. After this initial setup you will be greeted with the barcode scanner to finish your sign-in.")+"</p>" +
                 "<ul data-role='listview' data-inset='true'>" +
                     "<li><div class='ui-field-contain'><fieldset><form>" +
