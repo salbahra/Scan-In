@@ -165,7 +165,7 @@ $(document)
 .one("mobileinit", function(){
     //After jQuery mobile is loaded set intial configuration
     $.mobile.defaultPageTransition = "none";
-    $.mobile.hoverDelay = 0;
+    $.mobile.hoverDelay = 10;
     $.mobile.hashListeningEnabled = false;
 })
 .one("pagebeforechange", function() {
