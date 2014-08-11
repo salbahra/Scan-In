@@ -19,7 +19,7 @@ module.exports = function(grunt) {
   grunt.initConfig({
     pkg: grunt.file.readJSON("package.json"),
     jshint: {
-    	main: ["<%= pkg.main %>","Gruntfile.js"],
+      main: ["<%= pkg.main %>","Gruntfile.js"],
       options: {
         jshintrc: true
       }
@@ -47,7 +47,7 @@ module.exports = function(grunt) {
           from: /<p>Version: ([\d|\.]+)(-pre)?<\/p>/g,
           to: function(matchedWord, index, fullText, regexMatches){
             if (regexMatches[1]) {
-              return "<p>Version: "+regexMatches[0]+"</p>";
+              return "<p>Version: "+regexMatches[0]+(isPre ? "-pre" : "")+"</p>";
             } else {
               return "<p>Version: "+bumpVersion(regexMatches[0])+"</p>";
             }
@@ -61,7 +61,7 @@ module.exports = function(grunt) {
           from: /version     = "([\d|\.]+)(-pre)?"/g,
           to: function(matchedWord, index, fullText, regexMatches){
             if (regexMatches[1]) {
-              return "version     = \""+regexMatches[0]+"\"";
+              return "version     = \""+regexMatches[0]+(isPre ? "-pre" : "")+"\"";
             } else {
               return "version     = \""+bumpVersion(regexMatches[0])+"\"";
             }
@@ -84,7 +84,7 @@ module.exports = function(grunt) {
           from: /"version": "([\d|\.]+)(-pre)?"/g,
           to: function(matchedWord, index, fullText, regexMatches){
             if (regexMatches[1]) {
-              return "\"version\": \""+regexMatches[0]+"\"";
+              return "\"version\": \""+regexMatches[0]+(isPre ? "-pre" : "")+"\"";
             } else {
               return "\"version\": \""+bumpVersion(regexMatches[0])+"\"";
             }
