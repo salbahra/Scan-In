@@ -19,8 +19,15 @@ var isIEMobile = /IEMobile/.test(navigator.userAgent),
             }
         }
     },
+    profile = {
+        "lastname": "",
+        "firstname": "",
+        "degree": "",
+        "position": "",
+        "email": ""
+    },
     isReady = false,
-    profile, storage, language;
+    storage, language;
 
 // Prevent caching of AJAX requests on Android and Windows Phone devices
 if (isAndroid) {
