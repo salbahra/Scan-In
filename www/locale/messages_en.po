@@ -80,6 +80,9 @@ msgstr ""
 msgid "Did You Present Today?"
 msgstr ""
 
+msgid "Do you have any new conflict of interests to declare?"
+msgstr ""
+
 msgid ""
 "Unable to open the camera on your device. Please ensure the camera is "
 "working and try again."
