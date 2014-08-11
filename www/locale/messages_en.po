@@ -1,4 +1,4 @@
-msgid "Welcome to Scan-In"
+msgid "User Information"
 msgstr ""
 
 msgid ""
@@ -62,6 +62,9 @@ msgid "Staff"
 msgstr ""
 
 msgid "Email Address"
+msgstr ""
+
+msgid "Cancel"
 msgstr ""
 
 msgid ""
