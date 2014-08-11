@@ -61,7 +61,7 @@ module.exports = function(grunt) {
           from: /version     = "([\d|\.]+)(-pre)?"/g,
           to: function(matchedWord, index, fullText, regexMatches){
             if (regexMatches[1]) {
-              return "version     = \""+regexMatches[1]+"\"";
+              return "version     = \""+regexMatches[0]+"\"";
             } else {
               return "version     = \""+bumpVersion(regexMatches[0])+"\"";
             }
