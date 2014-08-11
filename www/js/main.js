@@ -320,13 +320,24 @@ function startScan() {
 
                 var signIn = function() {
                         // Submit sign in to Google
-                        $.get("https://spreadsheets.google.com/spreadsheet/formResponse?formkey="+formKey[1]+"&"+data,function(){
-                            // Show success
-                            showError("Success!",8000);
-                        });
+                        $.get("https://spreadsheets.google.com/spreadsheet/formResponse?formkey="+formKey[1]+"&"+data).retry({times:3, statusCodes: [0,408,500]}).then(
+                            function(reply){
+                                reply = $(reply).find(".errorheader");
+                                if (reply.length) {
+                                    showError("Unable to finish sign in. Please check your information is properly filled out and try again.");
+                                    return;
+                                }
+                                // Show success
+                                showError("Sign in was successful!",8000);
+                            },function(){
+                                // Show failure
+                                showError("Unable to finish sign in due to a connection problem. Please try again.");
+                            }
+                        );
                     },
                     getData = function(didPresent,coi) {
                         var coiMap = ["Not applicable, I did not present","No","Yes, explained in the presentation"],
+                            now = new Date(),
                             key;
 
                         didPresent = didPresent ? "Yes" : "No";
@@ -346,8 +357,9 @@ function startScan() {
                             }
                         }
 
-                        data += dataMap[form].didPresent + "=" + didPresent + "&";
-                        data += dataMap[form].coi + "=" + coi;
+                        data += dataMap[form].didPresent + "=" + escape(didPresent) + "&";
+                        data += dataMap[form].coi + "=" + escape(coi) + "&";
+                        data += dataMap[form].date + "=" + escape((now.getMonth()+1)+"/"+now.getDate()+"/"+now.getFullYear().toString().slice(2)) + "&";
                     },
                     formKey = $.mobile.path.parseUrl(result.text).hrefNoHash.match(/https?:\/\/docs.google.com\/spreadsheet\/viewform\?formkey=(.*)/) || [],
                     hasMatch = false,
