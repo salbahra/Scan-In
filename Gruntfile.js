@@ -69,7 +69,9 @@ module.exports = function(grunt) {
         },{
           from: /versionCode = "(\d+)"/g,
           to: function(matchedWord, index, fullText, regexMatches) {
-            if (!isPre) {
+            if (isPre) {
+              return "versionCode = \""+parseInt(regexMatches[0])+"\"";
+            } else {
               return "versionCode = \""+(parseInt(regexMatches[0])+1)+"\"";
             }
           }
