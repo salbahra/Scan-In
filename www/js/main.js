@@ -164,7 +164,7 @@ $(document)
 })
 .one("mobileinit", function(){
     //After jQuery mobile is loaded set intial configuration
-    $.mobile.defaultPageTransition = "fade";
+    $.mobile.defaultPageTransition = "none";
     $.mobile.hoverDelay = 0;
     $.mobile.hashListeningEnabled = false;
 })
@@ -276,8 +276,8 @@ function showDataRequest() {
             "profile": JSON.stringify(profile)
         }, function(){
             updateStartMenu();
-            page.one("pagehide",startScan);
             goBack();
+            startScan();
         });
 
         return false;
