@@ -374,8 +374,17 @@ function startScan() {
                 // Ask for presenting today and if so, any conflict of interest
                 areYouSure(_("Did You Present Today?"),"").then(
                     function(){
-                        getData(true,1);
-                        signIn();
+
+                        areYouSure(_("Do you have any new conflict of interests to declare?"),"").then(
+                            function(){
+                                getData(true,2);
+                                signIn();
+                            },
+                            function(){
+                                getData(true,1);
+                                signIn();
+                            }
+                        );
                     },
                     function(){
                         getData(false,0);
