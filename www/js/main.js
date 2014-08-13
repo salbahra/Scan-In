@@ -220,7 +220,7 @@ $(document)
         if (data.profile) {
             profile = JSON.parse(data.profile);
             updateStartMenu();
-            startScan();
+            setTimeout(startScan,10);
         }
     });
 })
@@ -447,16 +447,22 @@ function areYouSure(question, helptext) {
             "<a class='sure-dont ui-btn ui-corner-all ui-shadow' href='#'>"+_("No")+"</a>"+
         "</div>"
     ),
+    cleanUp = function(){
+        try {
+            StatusBar.backgroundColorByHexString("#F9F9F9");
+        } catch (err) {}
+        popup.popup("close");
+    },
     dfd = new $.Deferred();
 
     //Bind buttons
     popup.find(".sure-do").one("click.sure", function() {
-        $("#sure").popup("close");
+        cleanUp();
         dfd.resolve();
         return false;
     });
     popup.find(".sure-dont").one("click.sure", function() {
-        $("#sure").popup("close");
+        cleanUp();
         dfd.reject();
         return false;
     });
@@ -467,7 +473,11 @@ function areYouSure(question, helptext) {
 
     $(".ui-page-active").append(popup);
 
-    $("#sure").popup({history: false, positionTo: "window"}).popup("open");
+    try {
+        StatusBar.backgroundColorByHexString("#8F8F8F");
+    } catch (err) {}
+
+    popup.popup({history: false, positionTo: "window"}).popup("open");
 
     return dfd.promise();
 }
