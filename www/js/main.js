@@ -386,12 +386,17 @@ function startScan() {
                             }
                         }
 
+                        if (dataMap[form].hasOwnProperty("didPresent")) {
+                            data += dataMap[form].didPresent + "=" + escape(didPresent) + "&";
+                        }
+                        if (dataMap[form].hasOwnProperty("coi")) {
+                            data += dataMap[form].coi + "=" + escape(coi) + "&";
+                        }
                         data += dataMap[form].name + "=" + escape(form) + "&";
-                        data += dataMap[form].didPresent + "=" + escape(didPresent) + "&";
-                        data += dataMap[form].coi + "=" + escape(coi) + "&";
-                        data += dataMap[form].date + "=" + escape((now.getMonth()+1)+"/"+now.getDate()+"/"+now.getFullYear().toString().slice(2)) + "&";
+                        data += dataMap[form].date + "=" + escape((now.getMonth()+1)+"/"+now.getDate()+"/"+now.getFullYear().toString().slice(2));
+                        signIn();
                     },
-                    formKey = $.mobile.path.parseUrl(result.text).hrefNoHash.match(/https?:\/\/docs.google.com\/spreadsheet\/viewform\?formkey=(.*)/) || [],
+                    formKey = $.mobile.path.parseUrl(result.text).hrefNoHash.match(/https?:\/\/docs.google.com\/spreadsheet\/viewform\?(?:.*)?formkey=(.*)(?:&.*)?/) || [],
                     hasMatch = false,
                     data = "",
                     form;
@@ -413,26 +418,30 @@ function startScan() {
                     return;
                 }
 
-                // Ask for presenting today and if so, any conflict of interest
-                areYouSure(_("Did You Present Today?"),"").then(
-                    function(){
-
-                        areYouSure(_("Do you have any new conflict of interests to declare?"),"").then(
-                            function(){
-                                getData(true,2);
-                                signIn();
-                            },
-                            function(){
-                                getData(true,1);
-                                signIn();
+                if (dataMap[form].hasOwnProperty("didPresent")) {
+                    // Ask for presenting today and if so, any conflict of interest
+                    areYouSure(_("Did You Present Today?"),"").then(
+                        function(){
+                            if (dataMap[form].hasOwnProperty("coi")) {
+                                areYouSure(_("Do you have any new conflict of interests to declare?"),"").then(
+                                    function(){
+                                        getData(true,2);
+                                    },
+                                    function(){
+                                        getData(true,1);
+                                    }
+                                );
+                            } else {
+                                getData(true);
                             }
-                        );
-                    },
-                    function(){
-                        getData(false,0);
-                        signIn();
-                    }
-                );
+                        },
+                        function(){
+                            getData(false,0);
+                        }
+                    );
+                } else {
+                    getData();
+                }
             },
             function() {
                 showError(_("Unable to open the camera on your device. Please ensure the camera is working and try again."),4000);
