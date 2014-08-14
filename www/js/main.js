@@ -4,19 +4,37 @@ var isIEMobile = /IEMobile/.test(navigator.userAgent),
     isiOS = /iP(ad|hone|od)/.test(navigator.userAgent),
     isWinApp = /MSAppHost/.test(navigator.userAgent),
     dataMap = {
-        "UTHSCSA Path": {
-            "id": "dHp1cWFIUjFGbWN5VVBTNDZPMEhTSlE6MA",
-            "firstname": "entry.2.single",
-            "lastname": "entry.5.single",
-            "date": "entry.8.single",
-            "degree": "entry.6.group",
-            "position": "entry.9.group",
-            "didPresent": "entry.11.group",
-            "coi": "entry.13.group",
-            "email": "entry.10.single",
-            "other": {
-                "entry.18.group": "Laboratory Medicine Report"
-            }
+        "Laboratory Medicine Report": {
+            id: "dHp1cWFIUjFGbWN5VVBTNDZPMEhTSlE6MA",
+            firstname: "entry.2.single",
+            lastname: "entry.5.single",
+            date: "entry.8.single",
+            degree: "entry.6.group",
+            position: "entry.9.group",
+            didPresent: "entry.11.group",
+            coi: "entry.13.group",
+            email: "entry.10.single",
+            name: "entry.18.group"
+        },
+        "AP Grand Rounds": {
+            id: "dHkwbTZQeGxSd2R6WmZmeUZtNzROR3c6MA",
+            firstname: "entry.2.single",
+            lastname: "entry.5.single",
+            date: "entry.8.single",
+            degree: "entry.6.group",
+            position: function(){
+                var reply;
+
+                if (profile.position && profile.position === "Resident") {
+                    reply = "Yes";
+                } else {
+                    reply = "No";
+                }
+
+                return "entry.9.group="+reply;
+            },
+            email: "entry.10.single",
+            name: "entry.7.group"
         }
     },
     profile = {
@@ -360,18 +378,15 @@ function startScan() {
 
                         for (key in dataMap[form]) {
                             if (dataMap[form].hasOwnProperty(key) && profile.hasOwnProperty(key)) {
-                                data += dataMap[form][key]+"="+escape(profile[key])+"&";
-                            }
-                        }
-
-                        if (typeof dataMap[form].other === "object") {
-                            for (key in dataMap[form].other) {
-                                if (dataMap[form].other.hasOwnProperty(key)) {
-                                    data += key+"="+escape(dataMap[form].other[key])+"&";
+                                if (typeof dataMap[form][key] === "function") {
+                                    data += dataMap[form][key]() + "&";
+                                } else if (typeof dataMap[form][key] === "string") {
+                                    data += dataMap[form][key]+"="+escape(profile[key])+"&";
                                 }
                             }
                         }
 
+                        data += dataMap[form].name + "=" + escape(form) + "&";
                         data += dataMap[form].didPresent + "=" + escape(didPresent) + "&";
                         data += dataMap[form].coi + "=" + escape(coi) + "&";
                         data += dataMap[form].date + "=" + escape((now.getMonth()+1)+"/"+now.getDate()+"/"+now.getFullYear().toString().slice(2)) + "&";
