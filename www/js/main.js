@@ -369,11 +369,7 @@ function startScan() {
 
                         for (key in dataMap[form]) {
                             if (dataMap[form].hasOwnProperty(key) && profile.hasOwnProperty(key)) {
-                                if (typeof dataMap[form][key] === "function") {
-                                    data += dataMap[form][key]() + "&";
-                                } else if (typeof dataMap[form][key] === "string") {
-                                    data += dataMap[form][key]+"="+escape(profile[key])+"&";
-                                }
+                                data += dataMap[form][key]+"="+escape(profile[key])+"&";
                             }
                         }
 
