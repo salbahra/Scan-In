@@ -204,7 +204,9 @@ $(document)
         if (hash === "#dataRequest") {
             showDataRequest();
         } else if (hash === "#about") {
-            $(hash).find("button[data-icon='back']").one("click",goBack);
+            var newPage = $(hash)
+            newPage.find("button[data-icon='back']").one("click",goBack);
+            newPage.one("swiperight",goBack);
         }
     });
 
