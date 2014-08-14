@@ -227,8 +227,15 @@ $(document)
 .on("pause",function(){
 //Handle OS pause
 })
-.one("pageshow","#start",function(){
-    fixInputClick($("#start"));
+.on("pageshow","#start",function(){
+    var page = $("#start");
+    fixInputClick(page);
+    page.find("li img").off("vclick").on("vclick",startScan);
+    page.off("swipeleft").one("swipeleft",function(){
+        changePage("#dataRequest",{
+            transition: "slide"
+        });
+    });
 })
 .on("popupbeforeposition","#localization",checkCurrLang);
 
@@ -299,8 +306,16 @@ function showDataRequest() {
         return false;
     });
 
-    page.one("pagehide",function(){
-        page.remove();
+    page.one({
+        pagehide: function(){
+            page.remove();
+        },
+        swiperight: function(){
+            changePage("#start",{
+                transition: "slide",
+                reverse: true
+            });
+        }
     });
 
     fixInputClick(page);
