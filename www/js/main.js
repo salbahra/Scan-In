@@ -178,7 +178,7 @@ $(document)
 })
 .one("mobileinit", function(){
     //After jQuery mobile is loaded set intial configuration
-    $.mobile.defaultPageTransition = "none";
+    $.mobile.defaultPageTransition = "slide";
     $.mobile.activeBtnClass = "disabled";
     $.mobile.hashListeningEnabled = false;
 })
@@ -240,9 +240,7 @@ $(document)
     fixInputClick(page);
     page.find("li img").off("vclick").on("vclick",startScan);
     page.off("swipeleft").one("swipeleft",function(){
-        changePage("#dataRequest",{
-            transition: "slide"
-        });
+        changePage("#dataRequest");
     });
 })
 .on("popupbeforeposition","#localization",checkCurrLang);
@@ -318,12 +316,7 @@ function showDataRequest() {
         pagehide: function(){
             page.remove();
         },
-        swiperight: function(){
-            changePage("#start",{
-                transition: "slide",
-                reverse: true
-            });
-        }
+        swiperight: goBack
     });
 
     fixInputClick(page);
@@ -532,7 +525,9 @@ function goBack() {
             prev = "#start";
         }
 
-        changePage(prev);
+        changePage(prev,{
+            reverse: true
+        });
         $.mobile.document.one("pagehide",function(){
             $.mobile.navigate.history.activeIndex -= 1;
         });
