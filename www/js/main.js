@@ -22,27 +22,17 @@ var isIEMobile = /IEMobile/.test(navigator.userAgent),
             lastname: "entry.5.single",
             date: "entry.8.single",
             degree: "entry.6.group",
-            position: function(){
-                var reply;
-
-                if (profile.position && profile.position === "Resident") {
-                    reply = "Yes";
-                } else {
-                    reply = "No";
-                }
-
-                return "entry.9.group="+reply;
-            },
+            isResident: "entry.9.group",
             email: "entry.10.single",
             name: "entry.7.group"
         }
     },
     profile = {
-        "lastname": "",
-        "firstname": "",
-        "degree": "",
-        "position": "",
-        "email": ""
+        lastname: "",
+        firstname: "",
+        degree: "",
+        position: "",
+        email: ""
     },
     isReady = false,
     storage, language;
@@ -371,9 +361,10 @@ function startScan() {
                     getData = function(didPresent,coi) {
                         var coiMap = ["Not applicable, I did not present","No","Yes, explained in the presentation"],
                             now = new Date(),
+                            isResident = (profile.position && profile.position === "Resident") ? _("Yes") : _("No"),
                             key;
 
-                        didPresent = didPresent ? "Yes" : "No";
+                        didPresent = didPresent ? _("Yes") : _("No");
                         coi = coiMap[coi];
 
                         for (key in dataMap[form]) {
@@ -391,6 +382,9 @@ function startScan() {
                         }
                         if (dataMap[form].hasOwnProperty("coi")) {
                             data += dataMap[form].coi + "=" + escape(coi) + "&";
+                        }
+                        if (dataMap[form].hasOwnProperty("isResident")) {
+                            data += dataMap[form]["isResident"] + "=" + isResident + "&";
                         }
                         data += dataMap[form].name + "=" + escape(form) + "&";
                         data += dataMap[form].date + "=" + escape((now.getMonth()+1)+"/"+now.getDate()+"/"+now.getFullYear().toString().slice(2));
