@@ -206,10 +206,10 @@ $(document)
         } else if (hash === "#about") {
             var newPage = $(hash)
             newPage.find("button[data-icon='back']").one("click",goBack);
-            newPage.one("swiperight",goBack);
         }
     });
 
+    // Check if profile is set on first load and if so, launch scanner
     storage.get("profile",function(data){
         var timeout;
         if (data.profile) {
@@ -237,13 +237,19 @@ $(document)
 .on("pause",function(){
 //Handle OS pause
 })
-.on("pageshow","#start",function(){
-    var page = $("#start");
+.on("pagebeforeshow",function(e){
+    var id = "#"+e.target.id,
+        page = $(id);
+
     fixInputClick(page);
-    page.find("li img").off("vclick").on("vclick",startScan);
-    page.off("swipeleft").one("swipeleft",function(){
-        changePage("#dataRequest");
-    });
+    page.off("swiperight").one("swiperight",goBack);
+
+    if (id === "#start") {
+        page.find(".logo").off("vclick").on("vclick",startScan);
+        page.off("swipeleft").one("swipeleft",function(){
+            changePage("#dataRequest");
+        });
+    }
 })
 .on("popupbeforeposition","#localization",checkCurrLang);
 
@@ -257,7 +263,7 @@ function showDataRequest() {
     var page = $("<div data-role='page' id='dataRequest'>" +
             "<div class='ui-content' role='main'>" +
                 "<p class='center'>"+_("User Information")+"</p>" +
-                "<p class='center smaller rain-desc'>"+_("In order to facilitate a quicker login your information will be collected and saved to your device for future use. After this initial setup you will be greeted with the barcode scanner to finish your sign-in.")+"</p>" +
+                "<p class='center smaller rain-desc'>"+_("Please enter your sign-in information and tap submit to complete.")+"</p>" +
                 "<ul data-role='listview' data-inset='true'>" +
                     "<li><div class='ui-field-contain'><fieldset><form>" +
                         "<label for='lastname'>"+_("Last Name")+"</label><input data-mini='true' type='text' max='255' name='lastname' id='lastname' value='"+profile.lastname+"' />" +
@@ -314,14 +320,9 @@ function showDataRequest() {
         return false;
     });
 
-    page.one({
-        pagehide: function(){
-            page.remove();
-        },
-        swiperight: goBack
+    page.one("pagehide",function(){
+        page.remove();
     });
-
-    fixInputClick(page);
 
     page.appendTo("body");
 }
