@@ -1,4 +1,4 @@
-/*global $, Windows, MSApp, navigator, cordova, FastClick, StatusBar, escape */
+/*global $, Windows, MSApp, navigator, cordova, FastClick, StatusBar */
 var isIEMobile = /IEMobile/.test(navigator.userAgent),
     isAndroid = /Android|\bSilk\b/.test(navigator.userAgent),
     isiOS = /iP(ad|hone|od)/.test(navigator.userAgent),
@@ -365,21 +365,21 @@ function startScan() {
 
                         for (key in dataMap[form]) {
                             if (dataMap[form].hasOwnProperty(key) && profile.hasOwnProperty(key)) {
-                                data += dataMap[form][key]+"="+escape(profile[key])+"&";
+                                data += dataMap[form][key]+"="+encodeURIComponent(profile[key])+"&";
                             }
                         }
 
                         if (dataMap[form].hasOwnProperty("didPresent")) {
-                            data += dataMap[form].didPresent + "=" + escape(didPresent) + "&";
+                            data += dataMap[form].didPresent + "=" + encodeURIComponent(didPresent) + "&";
                         }
                         if (dataMap[form].hasOwnProperty("coi")) {
-                            data += dataMap[form].coi + "=" + escape(coi) + "&";
+                            data += dataMap[form].coi + "=" + encodeURIComponent(coi) + "&";
                         }
                         if (dataMap[form].hasOwnProperty("isResident")) {
                             data += dataMap[form]["isResident"] + "=" + isResident + "&";
                         }
-                        data += dataMap[form].name + "=" + escape(form) + "&";
-                        data += dataMap[form].date + "=" + escape((now.getMonth()+1)+"/"+now.getDate()+"/"+now.getFullYear().toString().slice(2));
+                        data += dataMap[form].name + "=" + encodeURIComponent(form) + "&";
+                        data += dataMap[form].date + "=" + encodeURIComponent((now.getMonth()+1)+"/"+now.getDate()+"/"+now.getFullYear().toString().slice(2));
                         signIn();
                     },
                     formKey = $.mobile.path.parseUrl(result.text).hrefNoHash.match(/https?:\/\/docs.google.com\/spreadsheet\/viewform\?(?:.*)?formkey=(.*)(?:&.*)?/) || [],
