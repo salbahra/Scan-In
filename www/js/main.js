@@ -3,30 +3,6 @@ var isIEMobile = /IEMobile/.test(navigator.userAgent),
     isAndroid = /Android|\bSilk\b/.test(navigator.userAgent),
     isiOS = /iP(ad|hone|od)/.test(navigator.userAgent),
     isWinApp = /MSAppHost/.test(navigator.userAgent),
-    dataMap = {
-        "Laboratory Medicine Report": {
-            id: "dHp1cWFIUjFGbWN5VVBTNDZPMEhTSlE6MA",
-            firstname: "entry.2.single",
-            lastname: "entry.5.single",
-            date: "entry.8.single",
-            degree: "entry.6.group",
-            position: "entry.9.group",
-            didPresent: "entry.11.group",
-            coi: "entry.13.group",
-            email: "entry.10.single",
-            name: "entry.18.group"
-        },
-        "AP Grand Rounds": {
-            id: "dHkwbTZQeGxSd2R6WmZmeUZtNzROR3c6MA",
-            firstname: "entry.2.single",
-            lastname: "entry.5.single",
-            date: "entry.8.single",
-            degree: "entry.6.group",
-            isResident: "entry.9.group",
-            email: "entry.10.single",
-            name: "entry.7.group"
-        }
-    },
     profile = {
         lastname: "",
         firstname: "",
@@ -35,7 +11,7 @@ var isIEMobile = /IEMobile/.test(navigator.userAgent),
         email: ""
     },
     isReady = false,
-    storage, language;
+    storage, language, dataMap;
 
 // Prevent caching of AJAX requests on Android and Windows Phone devices
 if (isAndroid) {
@@ -132,6 +108,9 @@ $(document)
     //Attach FastClick handler
     FastClick.attach(document.body);
 
+    // Get data map
+    getDataMap();
+    
     //Update the language on the page using the browser's locale
     updateLang();
 
@@ -436,6 +415,20 @@ function startScan() {
     } else {
         showError(_("Your device is currently unsupported for barcode scanning."));
     }
+}
+
+// Get data map information
+function getDataMap() {
+    $.getJSON("https://albahra.com/scanin/map.json").then(
+        function(data) {
+            dataMap = data;
+        },
+        function() {
+            $.getJSON("map.json").done(function(data) {
+                dataMap = data;
+            });
+        }
+    );
 }
 
 // Accessory functions
