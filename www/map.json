@@ -1,0 +1,24 @@
+{
+    "Laboratory Medicine Report": {
+        id: "dHp1cWFIUjFGbWN5VVBTNDZPMEhTSlE6MA",
+        firstname: "entry.2.single",
+        lastname: "entry.5.single",
+        date: "entry.8.single",
+        degree: "entry.6.group",
+        position: "entry.9.group",
+        didPresent: "entry.11.group",
+        coi: "entry.13.group",
+        email: "entry.10.single",
+        name: "entry.18.group"
+    },
+    "AP Grand Rounds": {
+        id: "dHkwbTZQeGxSd2R6WmZmeUZtNzROR3c6MA",
+        firstname: "entry.2.single",
+        lastname: "entry.5.single",
+        date: "entry.8.single",
+        degree: "entry.6.group",
+        isResident: "entry.9.group",
+        email: "entry.10.single",
+        name: "entry.7.group"
+    }
+}
