@@ -1,24 +1,24 @@
 {
     "Laboratory Medicine Report": {
         id: "dHp1cWFIUjFGbWN5VVBTNDZPMEhTSlE6MA",
-        firstname: "entry.2.single",
-        lastname: "entry.5.single",
-        date: "entry.8.single",
-        degree: "entry.6.group",
-        position: "entry.9.group",
-        didPresent: "entry.11.group",
-        coi: "entry.13.group",
-        email: "entry.10.single",
-        name: "entry.18.group"
+        firstname: "entry.1000003",
+        lastname: "entry.1000004",
+        date: "entry.1000007",
+        degree: "entry.1000005",
+        position: "entry.1000008",
+        didPresent: "entry.1000011",
+        coi: "entry.1000012",
+        email: "entry.1000009",
+        name: "entry.1000013"
     },
     "AP Grand Rounds": {
         id: "dHkwbTZQeGxSd2R6WmZmeUZtNzROR3c6MA",
-        firstname: "entry.2.single",
-        lastname: "entry.5.single",
-        date: "entry.8.single",
-        degree: "entry.6.group",
-        isResident: "entry.9.group",
-        email: "entry.10.single",
-        name: "entry.7.group"
+        firstname: "entry.1000003",
+        lastname: "entry.1000004",
+        date: "entry.1000007",
+        degree: "entry.1000005",
+        isResident: "entry.1000008",
+        email: "entry.1000009",
+        name: "entry.1000006"
     }
 }
