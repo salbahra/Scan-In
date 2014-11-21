@@ -110,7 +110,7 @@ $(document)
 
     // Get data map
     getDataMap();
-    
+
     //Update the language on the page using the browser's locale
     updateLang();
 
@@ -419,7 +419,7 @@ function startScan() {
 
 // Get data map information
 function getDataMap() {
-    $.getJSON("https://albahra.com/scanin/map.json").then(
+    $.getJSON("https://albahra.com/scanin/app/www/map.json").then(
         function(data) {
             dataMap = data;
         },
