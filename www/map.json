@@ -1,24 +1,35 @@
 {
     "Laboratory Medicine Report": {
-        id: "dHp1cWFIUjFGbWN5VVBTNDZPMEhTSlE6MA",
-        firstname: "entry.1000003",
-        lastname: "entry.1000004",
-        date: "entry.1000007",
-        degree: "entry.1000005",
-        position: "entry.1000008",
-        didPresent: "entry.1000011",
-        coi: "entry.1000012",
-        email: "entry.1000009",
-        name: "entry.1000013"
+        "id": "dHp1cWFIUjFGbWN5VVBTNDZPMEhTSlE6MA",
+        "firstname": "entry.1000003",
+        "lastname": "entry.1000004",
+        "date": "entry.1000007",
+        "degree": "entry.1000005",
+        "position": "entry.1000008",
+        "didPresent": "entry.1000011",
+        "coi": "entry.1000012",
+        "email": "entry.1000009",
+        "name": "entry.1000013"
     },
     "AP Grand Rounds": {
-        id: "dHkwbTZQeGxSd2R6WmZmeUZtNzROR3c6MA",
-        firstname: "entry.1000003",
-        lastname: "entry.1000004",
-        date: "entry.1000007",
-        degree: "entry.1000005",
-        isResident: "entry.1000008",
-        email: "entry.1000009",
-        name: "entry.1000006"
+        "id": "dHkwbTZQeGxSd2R6WmZmeUZtNzROR3c6MA",
+        "firstname": "entry.1000003",
+        "lastname": "entry.1000004",
+        "date": "entry.1000007",
+        "degree": "entry.1000005",
+        "isResident": "entry.1000008",
+        "email": "entry.1000009",
+        "name": "entry.1000006"
+    },
+    "Pathology Seminar Series": {
+        "id": "dEdzS3hOY2lEZk9vb2tCcGJWRk9OdUE6MA",
+        "firstname": "entry.1000003",
+        "lastname": "entry.1000004",
+        "date": "entry.1000007",
+        "degree": "entry.1000005",
+        "position": "entry.1000008",
+        "didPresent": "entry.1000011",
+        "coi": "entry.1000012",
+        "email": "entry.1000009"
     }
 }

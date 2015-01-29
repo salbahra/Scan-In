@@ -361,7 +361,7 @@ function startScan() {
                         data += dataMap[form].date + "=" + encodeURIComponent((now.getMonth()+1)+"/"+now.getDate()+"/"+now.getFullYear().toString().slice(2));
                         signIn();
                     },
-                    formKey = $.mobile.path.parseUrl(result.text).hrefNoHash.match(/https?:\/\/docs.google.com\/spreadsheet\/viewform\?(?:.*)?formkey=(.*)(?:&.*)?/) || [],
+                    formKey = $.mobile.path.parseUrl(result.text).hrefNoHash.match(/https?:\/\/docs.google.com\/forms\/d\/(?:.*)\/viewform\?formkey=(.*)/) || [],
                     hasMatch = false,
                     data = "",
                     form;
