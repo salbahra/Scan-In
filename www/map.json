@@ -31,5 +31,17 @@
         "didPresent": "entry_1000011",
         "coi": "entry_1000012",
         "email": "entry_1000009"
+    },
+    "Citywide Hematopathology Conference": {
+    	"id": "dGlMaTRjd2w2QnpFMXB4akpybkM0NkE6MA",
+        "date": "entry_1000007",
+        "name": "entry_1000006",
+        "firstname": "entry_1000003",
+        "lastname": "entry_1000004",
+        "degree": "entry_1000005",
+        "isResident": "entry_1000008",
+        "didPresent": "entry_1394594305",
+        "coi": "entry_2086168055",
+        "email": "entry_1096146365"
     }
 }
