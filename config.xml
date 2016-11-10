@@ -123,9 +123,4 @@
 			<splash src="resources/android/splash/drawable-port-xxhdpi-screen.png" density="port-xxhdpi"/>
 			<splash src="resources/android/splash/drawable-port-xxxhdpi-screen.png" density="port-xxxhdpi"/>
 		</platform>
-
-        <platform name="windows">
-            <icon src="resources/winphone/icons/icon-48.png" width="48" height="48" />
-            <splash src="resources/winphone/screens/startup.jpg" width="768" height="1280" />
-        </platform>
 	</widget>
