@@ -6,7 +6,8 @@
             android-versionCode = "4"
             versionCode = "4" >
 
-        <preference name="phonegap-version" value="cli-3.6.0" />
+        <!-- Declare PhoneGap Version -->
+        <preference name="phonegap-version" value="cli-6.3.0" />
 
         <!-- Allow CORS requests -->
         <access origin="*"/>
