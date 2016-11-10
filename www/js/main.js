@@ -318,7 +318,7 @@ function startScan() {
 
                 var signIn = function() {
                         // Submit sign in to Google
-                        $.get("https://spreadsheets.google.com/spreadsheet/formResponse?formkey="+formKey[1]+"&"+data).retry({times:3, statusCodes: [0,408,500]}).then(
+                        $.post("https://docs.google.com/forms/d/e/" + dataMap[form].id).retry({times:3, statusCodes: [0,408,500]}).then(
                             function(reply){
                                 reply = $(reply).find(".errorheader");
                                 if (reply.length) {
@@ -344,26 +344,26 @@ function startScan() {
 
                         for (key in dataMap[form]) {
                             if (dataMap[form].hasOwnProperty(key) && profile.hasOwnProperty(key)) {
-                                data += dataMap[form][key]+"="+encodeURIComponent(profile[key])+"&";
+                                data[ dataMap[form][key] ] = profile[key];
                             }
                         }
 
                         if (dataMap[form].hasOwnProperty("didPresent")) {
-                            data += dataMap[form].didPresent + "=" + encodeURIComponent(didPresent) + "&";
+                            data[ dataMap[form].didPresent ] = didPresent;
                         }
                         if (dataMap[form].hasOwnProperty("coi")) {
-                            data += dataMap[form].coi + "=" + encodeURIComponent(coi) + "&";
+                            data[ dataMap[form].coi ] = coi;
                         }
                         if (dataMap[form].hasOwnProperty("isResident")) {
-                            data += dataMap[form]["isResident"] + "=" + isResident + "&";
+                            data[ dataMap[form]["isResident"] ] = isResident;
                         }
-                        data += dataMap[form].name + "=" + encodeURIComponent(form) + "&";
-                        data += dataMap[form].date + "=" + encodeURIComponent((now.getMonth()+1)+"/"+now.getDate()+"/"+now.getFullYear().toString().slice(2));
+                        data[ dataMap[form].name ] = form;
+                        data[ dataMap[form].date ] = (now.getMonth()+1)+"/"+now.getDate()+"/"+now.getFullYear().toString().slice(2);
                         signIn();
                     },
                     formKey = $.mobile.path.parseUrl(result.text).hrefNoHash.match(/https?:\/\/.*google\.com.*formkey=(.*)&?/) || [],
                     hasMatch = false,
-                    data = "",
+                    data = {},
                     form;
 
                 if (typeof formKey[1] !== "string") {
@@ -372,7 +372,7 @@ function startScan() {
                 }
 
                 for (form in dataMap) {
-                    if (dataMap.hasOwnProperty(form) && dataMap[form].id === formKey[1]) {
+                    if (dataMap.hasOwnProperty(form) && dataMap[form].key === formKey[1]) {
                         hasMatch = true;
                         break;
                     }
