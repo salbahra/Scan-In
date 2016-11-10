@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+    <widget xmlns = "http://www.w3.org/ns/widgets"
+            xmlns:android   = "http://schemas.android.com/apk/res/android"
+            id          = "com.albahra.scanin"
+            version     = "1.0.3"
+            android-versionCode = "4"
+            versionCode = "4" >
+
+        <preference name="phonegap-version" value="cli-3.6.0" />
+
+        <!-- Allow CORS requests -->
+        <access origin="*"/>
+        <allow-navigation href="*" />
+
+        <!-- Disable iCloud backup of data on iOS -->
+        <preference name="BackupWebStorage" value="local" />
+
+        <!-- Stop the app in the background -->
+        <preference name="KeepRunning" value="false"/>
+
+        <!-- Prevent bounce scroll effect -->
+        <preference name="DisallowOverscroll" value="true"/>
+        <preference name="webviewbounce" value="false"/>
+        <preference name="UIWebViewBounce" value="false"/>
+
+        <!-- Set splash screen settings -->
+        <preference name="AutoHideSplashScreen" value="false" />
+        <preference name="SplashScreenDelay" value="10000"/>
+        <preference name="ShowSplashScreenSpinner" value="false" />
+        <preference name="SplashScreen" value="splash"/>
+        <preference name="FadeSplashScreen" value="false" />
+
+        <!-- Allow a grace period for Android devices to load JS -->
+        <preference name="loadUrlTimeoutValue" value="700000" />
+
+        <plugin name="cordova-plugin-statusbar" source="npm" />
+        <plugin name="cordova-plugin-splashscreen" source="npm" />
+        <plugin name="cordova-plugin-whitelist" source="npm" />
+        <plugin name="cordova-plugin-inappbrowser" source="npm" />
+        <plugin name="phonegap-plugin-barcodescanner" source="npm" />
+
+        <!-- Android specific Configuration -->
+        <config-file platform="android" parent="/manifest" mode="merge">
+
+            <!-- Declare SDK -->
+            <uses-sdk android:minSdkVersion="10" android:targetSdkVersion="22" />
+
+            <!-- Declare supported screens -->
+            <supports-screens
+                android:xlargeScreens="true"
+                android:largeScreens="true"
+                android:smallScreens="true" />
+
+            <!-- Declare theme which fixes select menu background color -->
+            <application android:theme="@android:style/Theme.Holo.Light.NoActionBar">
+                <activity android:theme="@android:style/Theme.Holo.Light.NoActionBar" android:windowSoftInputMode="adjustResize"></activity>
+            </application>
+
+        </config-file>
+
+        <name>Scan-In</name>
+
+        <description>
+            Designed to allow quick and easy sign in to Google spreadsheet based QR codes.
+        </description>
+
+        <author href="http://albahra.com/" email="salbahra@gmail.com">
+            Samer Albahra
+        </author>
+
+        <platform name="ios">
+            <preference name="Orientation" value="all" />
+            <icon src="res/ios/icons/icon-57.png"       width="57" height="57" />
+            <icon src="res/ios/icons/icon-60@2x.png"    width="120" height="120" />
+            <icon src="res/ios/icons/icon-72.png"       width="72" height="72" />
+            <icon src="res/ios/icons/icon-72@2x.png"    width="144" height="144" />
+            <icon src="res/ios/icons/icon-76.png"       width="76" height="76" />
+            <icon src="res/ios/icons/icon-76@2x.png"    width="152" height="152" />
+            <splash src="res/ios/screens/startup.png"                           width="320"  height="480"  />
+            <splash src="res/ios/screens/startup-retina.png"                    width="640"  height="960"  />
+            <splash src="res/ios/screens/startup-iphone5-retina.png"            width="640"  height="1136" />
+            <splash src="res/ios/screens/startup-tablet-landscape.png"          width="1024" height="768"  />
+            <splash src="res/ios/screens/startup-tablet-portrait.png"           width="768"  height="1024" />
+            <splash src="res/ios/screens/startup-tablet-landscape-retina.png"   width="2048" height="1536" />
+            <splash src="res/ios/screens/startup-tablet-portrait-retina.png"    width="1536" height="2048" />
+        </platform>
+
+        <platform name="android">
+            <icon src="res/android/icons/ldpi.png"      density="ldpi" />
+            <icon src="res/android/icons/mdpi.png"      density="mdpi" />
+            <icon src="res/android/icons/hdpi.png"      density="hdpi" />
+            <icon src="res/android/icons/xhdpi.png"     density="xhdpi" />
+            <icon src="res/android/icons/xxhdpi.png"    density="xxhdpi" />
+            <splash src="res/android/screens/mdpi.9.png"  density="mdpi" />
+            <splash src="res/android/screens/xhdpi.9.png" density="xhdpi" />
+        </platform>
+
+        <platform name="windows">
+            <icon src="res/winphone/icons/icon-48.png" width="48" height="48" />
+            <splash src="res/winphone/screens/startup.jpg" width="768" height="1280" />
+        </platform>
+
+    </widget>
