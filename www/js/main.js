@@ -318,16 +318,10 @@ function startScan() {
 
                 var signIn = function() {
                         // Submit sign in to Google
-                        $.post("https://docs.google.com/forms/d/e/" + dataMap[form].id + "/formResponse",data).success(
-                            function(reply){
-                                reply = $(reply).find(".errorheader");
-                                if (reply.length) {
-                                    showError("Unable to finish sign in. Please check your information is properly filled out and try again.");
-                                    return;
-                                }
-                                // Show success
-                                showError("Sign in was successful!",8000);
-                            } ).fail( function(){
+                        $.post("https://docs.google.com/forms/d/e/" + dataMap[form].id + "/formResponse",data,function(reply){
+                            // Show success
+                            showError("Sign in was successful!",8000);
+                        } ).fail( function(){
                                 // Show failure
                                 showError("Unable to finish sign in due to a connection problem. Please try again.");
                             }
