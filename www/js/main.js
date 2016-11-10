@@ -318,7 +318,7 @@ function startScan() {
 
                 var signIn = function() {
                         // Submit sign in to Google
-                        $.post("https://docs.google.com/forms/d/e/" + dataMap[form].id + "/formResponse",data).then(
+                        $.post("https://docs.google.com/forms/d/e/" + dataMap[form].id + "/formResponse",data).success(
                             function(reply){
                                 reply = $(reply).find(".errorheader");
                                 if (reply.length) {
@@ -327,7 +327,7 @@ function startScan() {
                                 }
                                 // Show success
                                 showError("Sign in was successful!",8000);
-                            },function(){
+                            } ).fail( function(){
                                 // Show failure
                                 showError("Unable to finish sign in due to a connection problem. Please try again.");
                             }
