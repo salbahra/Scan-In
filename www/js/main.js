@@ -318,7 +318,7 @@ function startScan() {
 
                 var signIn = function() {
                         // Submit sign in to Google
-                        $.post("https://docs.google.com/forms/d/e/" + dataMap[form].id).retry({times:3, statusCodes: [0,408,500]}).then(
+                        $.post("https://docs.google.com/forms/d/e/" + dataMap[form].id + "/formResponse",data).retry({times:3, statusCodes: [0,408,500]}).then(
                             function(reply){
                                 reply = $(reply).find(".errorheader");
                                 if (reply.length) {
